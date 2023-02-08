@@ -9,6 +9,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import assign04.LargestNumberSolver.ArrayComparator;
+import assign04.LargestNumberSolver.FullArrayComparator;
+
 class LargestNumberSolverTest {
 
 	ArrayList<Integer> array= new ArrayList<Integer>();

@@ -31,36 +31,34 @@ public class LargestNumberSolver {
 		return null;
 		
 	}
-//	public class ArrayComparator<T> implements Comparator<T>{
-//
-//		@Override
-//		public int compare(Object o1, Object o2) {
-//			StringBuilder number= new StringBuilder();
-//			StringBuilder number2= new StringBuilder();
-//			number.append(o1);
-//			number.append(o2);
-//			number2.append(o2);
-//			number2.append(o1);
-//			return (number.compareTo(number2)); 
-//				
-//			}
-//
-//		
-//	}
-//	public class FullArrayComparator<T> implements Comparator<ArrayList<T>>{
-//
-//
-//		@Override
-//		public int compare(ArrayList<T> o1, ArrayList<T> o2) {
-//			StringBuilder number= new StringBuilder();
-//			StringBuilder number2= new StringBuilder();
-//			for(T i:(ArrayList<T>)o1)
-//				number.append(i);
-//			for(T j:(ArrayList<T>)o2)
-//				number2.append(j);
-//			return number.compareTo(number2);
-//		}
-//
-//		
-//	}
+	public class ArrayComparator<T> implements Comparator<T>{
+
+		@Override
+		public int compare(Object o1, Object o2) {
+			StringBuilder number= new StringBuilder();
+			StringBuilder number2= new StringBuilder();
+			number.append(o1);
+			number.append(o2);
+			number2.append(o2);
+			number2.append(o1);
+			return number2.compareTo(number); 
+		}
+
+		
+	}
+	public class FullArrayComparator implements Comparator<ArrayList<Integer>>{
+
+
+	@Override
+	public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
+		StringBuilder number= new StringBuilder();
+		StringBuilder number2= new StringBuilder();
+		for(Integer i:(ArrayList<Integer>)o1)
+			number.append(i);
+		for(Integer j:(ArrayList<Integer>)o2)
+			number2.append(j);
+		return number2.compareTo(number);
+	}
+
+}
 }
