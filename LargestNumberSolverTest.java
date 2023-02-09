@@ -1,44 +1,67 @@
 package assign04;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
-import assign04.LargestNumberSolver.ArrayComparator;
-import assign04.LargestNumberSolver.FullArrayComparator;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.Comparator;
 
-class LargestNumberSolverTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-	ArrayList<Integer> array= new ArrayList<Integer>();
-	ArrayList<Integer> array1= new ArrayList<Integer>( Arrays.asList(1,2,23,45));
-	ArrayList<Integer> array2= new ArrayList<Integer>( Arrays.asList(23,65,768,96,34,345));
-	ArrayList<Integer> array3= new ArrayList<Integer>( Arrays.asList(1,2));
-	List<ArrayList<Integer>> arrays= new ArrayList<ArrayList<Integer>>();
+public class LargestNumberSolverTest extends LargestNumberSolver{
 
-	@Test
-    <T> void compareArrayTest() {
-		array.add(11);
-		array.add(67);
-		array.add(79);
-		array.add(7);
-		array.add(22);
-		array.add(13);
-		arrays.add(array);
-		arrays.add(array1);
-		arrays.add(array2);
-		arrays.add(array3);
-		System.out.println(arrays.toString());
-		for (ArrayList<Integer> i:arrays) {
-			Collections.sort(i, new ArrayComparator());
-		}
-		Collections.sort(arrays,new FullArrayComparator());
-		System.out.print(arrays.toString());
-		assertEquals(array2,arrays.get(0));
+    Integer[] arr1 = {3,1,6,3,10,2,1};
+
+    Point p1 = new Point(5,6);
+    Point p2 = new Point(3,5);
+    Point p3 = new Point(9,2);
+    Point p4 = new Point(1,0);
+    Point p5 = new Point(0,1);
+    Point[] arr2 = {p1,p2,p3,p4,p5};
+    Comparator<Integer> intSort = Comparator.naturalOrder();
+    Comparator<Point> pointSort = (Point o1, Point o2) -> (int)(o1.getX() - o2.getX());
+    @Test
+    void insertionSortTest(){
+        insertionSort(arr1,intSort);
+        System.out.print(Arrays.toString(arr1));
+        assertEquals(1, arr1[0]);
+    }
+
+    @Test
+    void insertionSortTest2(){
+        insertionSort(arr2,pointSort);
+        System.out.print(Arrays.toString(arr2));
+        assertEquals(new Point(0,1), arr2[0]);
+    }
+
+
+    @Test
+    void findLargestNumberTest(){
+        System.out.print(findLargestNumber(arr1));
+    }
+
+    @Test
+    void findLargestIntTest(){
+
+    }
+
+    @Test
+    void findLargestLongTest(){
+
+    }
+
+    @Test
+    void sumTest(){
+
+    }
+
+    @Test
+    void findKthLargestTest(){
+
+    }
+    @Test
+    void readFileTest(){
+
     }
 
 }
