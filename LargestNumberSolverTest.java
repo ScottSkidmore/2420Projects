@@ -85,6 +85,9 @@ class LargestNumberSolverTest{
 	    }
 	    @Test
 	    void readFileTest(){
+	        ArrayList<Integer[]> arr = new ArrayList<>();
+	        arr = (ArrayList<Integer[]>) LargestNumberSolver.readFile("C:\\Users\\Scott\\eclipse-workspace\\CS 2420\\integers.txt");
+	        System.out.println(Arrays.toString(arr.get(2)));
 
 	    }
 

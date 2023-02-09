@@ -1,5 +1,10 @@
 package assign04;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,30 +111,55 @@ public class LargestNumberSolver {
 		for(Integer[] arr:list)
 		insertionSort(arr,new ArrayComparator());
 		Integer[] largest=list.get(0);
+		int count=0;
 		for(int j=0;j<k;j++) {
-			largest=list.get(j);
 		for(int i=j;i<list.size();i++) {
-			if((findLargestNumber(list.get(i)).compareTo(findLargestNumber(largest))>=0)) {
+			if((findLargestNumber(list.get(i)).compareTo(findLargestNumber(largest))>0)) {
 				largest=list.get(i);
+				count++;
 			}
-			Integer[] hold=list.get(j);
-			int pos=list.indexOf(largest);
-			list.set(j, largest);
-			list.set(pos, list.get(j));
 		}
+		Integer[] hold=list.get(j);
+		int pos=list.indexOf(largest);
+		list.set(j, largest);
+		list.set(pos, hold);
+			largest=list.get(j+1);
+		
 
 			}
-		for(Integer[] i:lists)
-		System.out.println(Arrays.toString(i));
+		//for(Integer[] i:lists)
+		//System.out.println(Arrays.toString(i));
 		return list.get(k);
 
 	}
 
 	public static List<Integer[]> readFile(String filename) {
-	
-		return null;
+		   String newLine;
+		   ArrayList<Integer[]> list = new ArrayList<>();
+		   try {
+		      File file = new File(filename);
+		      FileReader reader = new FileReader(file);
+		      BufferedReader br = new BufferedReader(reader);
+		      while ((newLine = br.readLine()) != null) {
+		         String[] parts = newLine.split("\\s+");
+		         Integer[] temp = new Integer[parts.length];
+		         for(int i = 0; i < parts.length; i ++){
+		            Integer num = new Integer(parts[i]);
+		            temp[i] = num;
+		         }
+		         list.add(temp);
 
-	}
+		      }
+		   }
+		   catch (FileNotFoundException e) {
+		      return list;
+		   } catch (IOException e) {
+		      return list;
+		   }
+
+		   return list;
+
+		}
 
 
 	public static class ArrayComparator implements Comparator<Integer> {
