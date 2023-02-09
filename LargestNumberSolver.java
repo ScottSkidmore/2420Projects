@@ -40,6 +40,9 @@ public class LargestNumberSolver {
 	 * 	the largest number that can be formed is 0.
 	 */
 	public static BigInteger findLargestNumber(Integer[] arr) {
+		if(arr.length==0) {
+			return new BigInteger("0");
+		}
 		insertionSort(arr,new ArrayComparator());
 		StringBuilder number = new StringBuilder();
 		for (Integer i : arr)
@@ -60,6 +63,9 @@ public class LargestNumberSolver {
 	 * @throws OutOfRangeException
 	 */
 	public static int findLargestInt(Integer[] arr) {
+		if(arr.length==0) {
+			return 0;
+		}
 		insertionSort(arr,new ArrayComparator());
 		StringBuilder number = new StringBuilder();
 		for (Integer i : arr)
@@ -75,6 +81,9 @@ public class LargestNumberSolver {
 	}
 
 	public static long findLargestLong(Integer[] arr) {
+		if(arr.length==0) {
+			return 0;
+		}
 		insertionSort(arr,new ArrayComparator());
 		StringBuilder number = new StringBuilder();
 		for (Integer i : arr)
