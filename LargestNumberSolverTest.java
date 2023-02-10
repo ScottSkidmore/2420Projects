@@ -143,6 +143,12 @@ class LargestNumberSolverTest{
         numbers.add(arr6);
         assertEquals(arr4,LargestNumberSolver.findKthLargest(numbers,4));
     }
+    @Test
+    void findKthLargestTestSmall() throws Exception{
+    	numbers.add(arr4);
+    	numbers.add(arr1);
+        assertEquals(arr1,LargestNumberSolver.findKthLargest(numbers,0));
+    }
 
     @Test
     void findKthLargestTestEmpty() throws Exception{

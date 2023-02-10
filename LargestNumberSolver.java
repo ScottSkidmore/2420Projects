@@ -1,5 +1,7 @@
 package assign04;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,6 +13,8 @@ import java.util.Arrays;
 
 import java.util.Comparator;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
 
 /**
  *  This class contains methods that are used to construct the longest integer
@@ -127,16 +131,31 @@ public class LargestNumberSolver {
 		if(k>lists.size()-1 || k < 0) {
 			throw new IllegalArgumentException("K is not a valid position in the list.");
 		}
+
 		List<Integer[]> list=lists;
 		for(Integer[] arr:list)
 			insertionSort(arr,new ArrayComparator());
 		Integer[] largest=list.get(0);
-		int count=0;
+		if(k==0) {
+			for(int j=0;j<k+1;j++) {
+				for(int i=j;i<list.size();i++) {
+					if((findLargestNumber(list.get(i)).compareTo(findLargestNumber(largest))>0)) {
+						largest=list.get(i);
+					}
+				}
+				Integer[] hold=list.get(j);
+				int pos=list.indexOf(largest);
+				list.set(j, largest);
+				list.set(pos, hold);
+				largest=list.get(j+1);
+
+
+			}
+		}
 		for(int j=0;j<k;j++) {
 			for(int i=j;i<list.size();i++) {
 				if((findLargestNumber(list.get(i)).compareTo(findLargestNumber(largest))>0)) {
 					largest=list.get(i);
-					count++;
 				}
 			}
 			Integer[] hold=list.get(j);
