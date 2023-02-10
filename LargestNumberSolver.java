@@ -63,8 +63,6 @@ public class LargestNumberSolver {
 	 * This method returns the largest int value that can be formed by arranging the
 	 * integers of the given array, in any order. AnOutOfRangeException is thrown
 	 * if the largest number that can be formed is too large for the int data type.
-	 * Logic for solving the problem of determining the largest number should not appear
-	 * again in this method — call an existing public method or a helper method.
 	 * @param arr - The array that you want to find the biggest possible integer.
 	 * @return - biggest possible number that can be formed from the array.
 	 * @throws OutOfRangeException
@@ -120,8 +118,8 @@ public class LargestNumberSolver {
 	 * This method determines the kth largest number that can be formed by each array in the given list.  E.g.,
 	 * if k=0 returns the largest overall, if k=list.size()-1 returns the smallest overall.  This method returns
 	 * the original array that represents the kth largest number, not the kth largest number itself.
-	 * @param lists
-	 * @param k
+	 * @param lists list of arrays you need to look through
+	 * @param k the position of the array we are looking for
 	 * @return
 	 * @throws Exception
 	 */
@@ -149,8 +147,6 @@ public class LargestNumberSolver {
 
 
 		}
-		//for(Integer[] i:lists)
-		//System.out.println(Arrays.toString(i));
 		return list.get(k);
 	}
 
@@ -165,6 +161,7 @@ public class LargestNumberSolver {
 		String newLine;
 		ArrayList<Integer[]> list = new ArrayList<>();
 		try {
+			
 			File file = new File(filename);
 			FileReader reader = new FileReader(file);
 			BufferedReader br = new BufferedReader(reader);
@@ -178,9 +175,7 @@ public class LargestNumberSolver {
 				list.add(temp);
 			}
 		}
-		catch (FileNotFoundException e) {
-			return list;
-		} catch (IOException e) {
+		catch (Exception e) {
 			return list;
 		}
 

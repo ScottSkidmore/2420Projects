@@ -153,7 +153,14 @@ class LargestNumberSolverTest{
     void readFileTest(){
         ArrayList<Integer[]> arr = new ArrayList<>();
         arr = (ArrayList<Integer[]>) LargestNumberSolver.readFile("/Users/natezuro/eclipse-workspace/cs2420ii/src/integers.txt");
-        assertEquals(text[15],arr.get(2)[15]);
+        assertEquals(text,arr.get(3));
+
+    }
+    @Test
+    void readFileTestNoFile(){
+        ArrayList<Integer[]> arr = new ArrayList<>();
+        arr = (ArrayList<Integer[]>) LargestNumberSolver.readFile("/Users/natezuro/eclipse-workspace/cs2420ii/src/integers.tt");
+        assertEquals(numbers,arr);
 
     }
     @Test
@@ -165,3 +172,4 @@ class LargestNumberSolverTest{
     }
 
 }
+
