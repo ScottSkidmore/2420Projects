@@ -134,6 +134,7 @@ public class LargestNumberSolver {
 		if(k>lists.size()-1 || k < 0) {
 			throw new IllegalArgumentException("K is not a valid position in the list.");
 		}
+		k=k+1;
 		 List<Integer[]> copy = new ArrayList<>();
 		   for(int array = 0; array < lists.size(); array++){
 		      Integer[] temp = null;
@@ -151,8 +152,6 @@ public class LargestNumberSolver {
 					if((findLargestNumber(copy.get(i)).compareTo(findLargestNumber(largest))>0)) {
 						largest=copy.get(i);
 					}
-				
-
 		}
 	}
 			return(lists.get(copy.indexOf(largest)));
@@ -162,6 +161,9 @@ public class LargestNumberSolver {
 			copy1.add(null);
 		}
 		for(int j=0;j<k;j++) {
+			if(j<k+1) {
+				largest=new Integer [] {};
+				}
 			for(int i=j;i<copy.size();i++) {
 				if((findLargestNumber(copy.get(i)).compareTo(findLargestNumber(largest))>0)) {
 					largest=copy.get(i);
@@ -169,9 +171,7 @@ public class LargestNumberSolver {
 			}
 			copy1.set(copy.indexOf(largest),largest);
 			copy.set(copy.indexOf(largest),null);
-			if(j<k+1) {
-			largest=copy.get(j+1);
-			}
+			
 		}
 		return(lists.get(copy1.indexOf(largest)));
 	}
