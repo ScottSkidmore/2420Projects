@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -52,6 +52,9 @@ public class LargestNumberSolver {
 	 * 	the largest number that can be formed is 0.
 	 */
 	public static BigInteger findLargestNumber(Integer[] arr) {
+		if(arr==(null)) {
+			return new BigInteger("0");
+		}
 		if(arr.length==0) {
 			return new BigInteger("0");
 		}
@@ -131,42 +134,46 @@ public class LargestNumberSolver {
 		if(k>lists.size()-1 || k < 0) {
 			throw new IllegalArgumentException("K is not a valid position in the list.");
 		}
-
-		List<Integer[]> list=lists;
-		for(Integer[] arr:list)
-			insertionSort(arr,new ArrayComparator());
-		Integer[] largest=list.get(0);
+		 List<Integer[]> copy = new ArrayList<>();
+		   for(int array = 0; array < lists.size(); array++){
+		      Integer[] temp = null;
+		      temp = new Integer[lists.get(array).length];
+		      for(int element = 0; element < lists.get(array).length; element++){
+		         temp[element] = lists.get(array)[element];
+		         if(element == lists.get(array).length-1) copy.add(temp);
+		      }
+		   }
+		Integer[] largest=copy.get(0);
 		if(k==0) {
+			
 			for(int j=0;j<k+1;j++) {
-				for(int i=j;i<list.size();i++) {
-					if((findLargestNumber(list.get(i)).compareTo(findLargestNumber(largest))>0)) {
-						largest=list.get(i);
+				for(int i=j;i<copy.size();i++) {
+					if((findLargestNumber(copy.get(i)).compareTo(findLargestNumber(largest))>0)) {
+						largest=copy.get(i);
 					}
-				}
-				Integer[] hold=list.get(j);
-				int pos=list.indexOf(largest);
-				list.set(j, largest);
-				list.set(pos, hold);
-				largest=list.get(j+1);
+				
 
-
-			}
+		}
+	}
+			return(lists.get(copy.indexOf(largest)));
+		}
+		List<Integer[]> copy1 = new ArrayList<>();
+		for(int i=0;i<copy.size();i++) {
+			copy1.add(null);
 		}
 		for(int j=0;j<k;j++) {
-			for(int i=j;i<list.size();i++) {
-				if((findLargestNumber(list.get(i)).compareTo(findLargestNumber(largest))>0)) {
-					largest=list.get(i);
+			for(int i=j;i<copy.size();i++) {
+				if((findLargestNumber(copy.get(i)).compareTo(findLargestNumber(largest))>0)) {
+					largest=copy.get(i);
 				}
 			}
-			Integer[] hold=list.get(j);
-			int pos=list.indexOf(largest);
-			list.set(j, largest);
-			list.set(pos, hold);
-			largest=list.get(j+1);
-
-
+			copy1.set(copy.indexOf(largest),largest);
+			copy.set(copy.indexOf(largest),null);
+			if(j<k+1) {
+			largest=copy.get(j+1);
+			}
 		}
-		return list.get(k);
+		return(lists.get(copy1.indexOf(largest)));
 	}
 
 	/**

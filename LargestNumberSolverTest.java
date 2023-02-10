@@ -24,6 +24,7 @@ class LargestNumberSolverTest{
     Integer[] arr4 = {1,2};
     Integer[] arr5 = {789,36};
     Integer[] arr6 = {28984,29};
+    Integer[] arr7 = {289843,4536226,234654634,73463,46225};
     Integer[] empty= {};
     Integer[] text= {56, 78, 62, 38, 544, 42, 63, 81, 59, 28, 98, 971, 78, 14, 54, 26, 70, 32, 62, 72, 22, 12, 35, 35, 88, 42, 87, 74, 51, 92, 88, 71, 69, 14, 87, 10, 5906, 10, 9, 16, 55, 29, 65, 8, 80, 13, 19, 55, 22, 20, 6, 113, 97, 42, 58, 82, 26, 79, 46, 21, 9, 89, 90, 55, 63, 6663, 14, 33, 65, 4, 53, 9, 23, 63, 346, 93, 722, 64, 66, 96, 46, 62, 47, 34, 11, 38, 75, 251, 64, 74, 98, 96, 43};
 
@@ -146,8 +147,11 @@ class LargestNumberSolverTest{
     @Test
     void findKthLargestTestSmall() throws Exception{
     	numbers.add(arr4);
+    	numbers.add(arr5);
+    	numbers.add(text);
     	numbers.add(arr1);
-        assertEquals(arr1,LargestNumberSolver.findKthLargest(numbers,0));
+    	
+        assertEquals(text,LargestNumberSolver.findKthLargest(numbers,0));
     }
 
     @Test
@@ -176,6 +180,26 @@ class LargestNumberSolverTest{
         assertEquals(numbers,arr);
 
     }
+//    @Test
+//    void timeTest() throws Exception{
+//    	int j=200;
+//    	for(int q=0;q<30;q++) {
+//    		j=j+200;
+//    	for (int i=0;i<j;i++) {
+//    		numbers.add(text);
+//    		numbers.add(arr1);
+//    		numbers.add(arr4);
+//    		numbers.add(arr3);
+//    		numbers.add(arr5);
+//    	}
+//    	double start=System.nanoTime();
+//    	Integer[] hold=LargestNumberSolver.findKthLargest(numbers,j/2);
+//    	double end=System.nanoTime();
+//    	double total=end-start;
+//    	System.out.println(total);
+//    	}
+//    	
+//    }
 
 }
 
