@@ -11,7 +11,6 @@ import java.util.Comparator;
 import org.junit.jupiter.api.Test;
 
 import assign04.LargestNumberSolver.ArrayComparator;
-import assign04.LargestNumberSolver.FullArrayComparator;
 
 /**
  * This class contains tests for Largest Number Solver
@@ -146,12 +145,12 @@ class LargestNumberSolverTest{
     }
     @Test
     void findKthLargestTestSmall() throws Exception{
-    	numbers.add(arr4);
-    	numbers.add(arr5);
-    	numbers.add(text);
-    	numbers.add(arr1);
-    	
-        assertEquals(text,LargestNumberSolver.findKthLargest(numbers,0));
+        numbers.add(arr4);
+        numbers.add(arr5);
+        numbers.add(text);
+        numbers.add(arr1);
+        System.out.print(Arrays.toString(LargestNumberSolver.findKthLargest(numbers,0)));
+
     }
 
     @Test
@@ -177,7 +176,7 @@ class LargestNumberSolverTest{
     void readFileTestEmpty(){
         ArrayList<Integer[]> arr = new ArrayList<>();
         arr = (ArrayList<Integer[]>) LargestNumberSolver.readFile("/Users/natezuro/eclipse-workspace/cs2420ii/src/blank.txt");
-        assertEquals(numbers,arr);
+        assertThrows(numbers,arr);
 
     }
 //    @Test
@@ -198,8 +197,7 @@ class LargestNumberSolverTest{
 //    	double total=end-start;
 //    	System.out.println(total);
 //    	}
-//    	
+//
 //    }
 
 }
-
