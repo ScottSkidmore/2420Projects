@@ -8,9 +8,17 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ *  This class contains methods that are used to construct the longest integer
+ *  that can be formed from an array of numbers. It also has methods for reading
+ *  files and summation.
+ *  @author Scott Skidmore and Nate Zuro
+ * @Version February 9th, 2023
+ */
 public class LargestNumberSolver {
 	/**
 	 * This generic method sorts the input array using an
@@ -47,57 +55,54 @@ public class LargestNumberSolver {
 		StringBuilder number = new StringBuilder();
 		for (Integer i : arr)
 			number.append(i);
-			String numberString=number.toString();
-		    BigInteger fin= new BigInteger(numberString);
-		    return fin;
+		String numberString=number.toString();
+		BigInteger fin= new BigInteger(numberString);
+		return fin;
 	}
 	/**
 	 * This method returns the largest int value that can be formed by arranging the
-	 * integers of the given array, in any order. An OutOfRangeException Download
-	 * OutOfRangeException is thrown if the largest number that can be formed
-	 * is too large for the int data type.  Logic for solving the problem of
-	 * determining the largest number should not appear again in this method —
-	 * call an existing public method or a helper method.
-	 * @param arr
-	 * @return
+	 * integers of the given array, in any order. AnOutOfRangeException is thrown
+	 * if the largest number that can be formed is too large for the int data type.
+	 * Logic for solving the problem of determining the largest number should not appear
+	 * again in this method — call an existing public method or a helper method.
+	 * @param arr - The array that you want to find the biggest possible integer.
+	 * @return - biggest possible number that can be formed from the array.
 	 * @throws OutOfRangeException
 	 */
-	public static int findLargestInt(Integer[] arr) {
-		if(arr.length==0) {
-			return 0;
+	public static int findLargestInt(Integer[] arr) throws OutOfRangeException{
+
+		try {
+			String stringInt = findLargestNumber(arr).toString();
+			int fin= Integer.parseInt(stringInt);
+			return fin;
 		}
-		insertionSort(arr,new ArrayComparator());
-		StringBuilder number = new StringBuilder();
-		for (Integer i : arr)
-			number.append(i);
-			String numberString=number.toString();
-			try {
-		    Integer fin= Integer.parseInt(numberString);
-		    return fin;
-			}
-			catch(Exception OutOfRangeException){
-				throw OutOfRangeException;
-			}
+		catch(Exception e){
+			throw new OutOfRangeException("int");
+		}
 	}
 
-	public static long findLargestLong(Integer[] arr) {
-		if(arr.length==0) {
-			return 0;
+	/**
+	 * This method behaves the same as the previous method, but for data type long instead of data type int.
+	 * @param arr - the array that you want to find the biggest possible integer
+	 * @return longest integer that can be formed as a long
+	 */
+	public static long findLargestLong(Integer[] arr) throws OutOfRangeException{
+		try {
+			String stringLong = findLargestNumber(arr).toString();
+			Long fin= Long.parseLong(stringLong);
+			return fin;
 		}
-		insertionSort(arr,new ArrayComparator());
-		StringBuilder number = new StringBuilder();
-		for (Integer i : arr)
-			number.append(i);
-			String numberString=number.toString();
-			try {
-		    Long fin= Long.parseLong(numberString);
-		    return fin;
-			}
-			catch(Exception OutOfRangeException){
-				throw OutOfRangeException;
-			}
+		catch(Exception e){
+			throw new OutOfRangeException("long");
+		}
 	}
 
+	/**
+	 * This method sums the largest numbers that can be formed by each array in the given list.
+	 * This method must not alter the given list.
+	 * @param list - an array list of arrays
+	 * @return - the sum of all the numbers in every array.
+	 */
 	public static BigInteger sum(List<Integer[]> list) {
 		BigInteger sum=new BigInteger("0");
 		for(Integer[] arr:list) {
@@ -109,66 +114,79 @@ public class LargestNumberSolver {
 			sum=hold.add(sum);
 		}
 		return sum;
-
 	}
 
-	public static Integer[] findKthLargest(List<Integer[]> lists, int k) throws Exception {
-		if(k>lists.size()-1) {
-			throw new Exception("IllegalArgumentException");
+	/**
+	 * This method determines the kth largest number that can be formed by each array in the given list.  E.g.,
+	 * if k=0 returns the largest overall, if k=list.size()-1 returns the smallest overall.  This method returns
+	 * the original array that represents the kth largest number, not the kth largest number itself.
+	 * @param lists
+	 * @param k
+	 * @return
+	 * @throws Exception
+	 */
+	public static Integer[] findKthLargest(List<Integer[]> lists, int k) throws IllegalArgumentException {
+		if(k>lists.size()-1 || k < 0) {
+			throw new IllegalArgumentException("K is not a valid position in the list.");
 		}
 		List<Integer[]> list=lists;
 		for(Integer[] arr:list)
-		insertionSort(arr,new ArrayComparator());
+			insertionSort(arr,new ArrayComparator());
 		Integer[] largest=list.get(0);
 		int count=0;
 		for(int j=0;j<k;j++) {
-		for(int i=j;i<list.size();i++) {
-			if((findLargestNumber(list.get(i)).compareTo(findLargestNumber(largest))>0)) {
-				largest=list.get(i);
-				count++;
+			for(int i=j;i<list.size();i++) {
+				if((findLargestNumber(list.get(i)).compareTo(findLargestNumber(largest))>0)) {
+					largest=list.get(i);
+					count++;
+				}
 			}
-		}
-		Integer[] hold=list.get(j);
-		int pos=list.indexOf(largest);
-		list.set(j, largest);
-		list.set(pos, hold);
+			Integer[] hold=list.get(j);
+			int pos=list.indexOf(largest);
+			list.set(j, largest);
+			list.set(pos, hold);
 			largest=list.get(j+1);
-		
 
-			}
+
+		}
 		//for(Integer[] i:lists)
 		//System.out.println(Arrays.toString(i));
 		return list.get(k);
-
 	}
 
+	/**
+	 *  This method generates list of integer arrays from an input file, such that each line
+	 *  corresponds to one array of integers separated by blank spaces, and returns an empty
+	 *  list if the file does not exist.
+	 * @param filename - the file to be read
+	 * @return - an array list of all of the arrays in the file.
+	 */
 	public static List<Integer[]> readFile(String filename) {
-		   String newLine;
-		   ArrayList<Integer[]> list = new ArrayList<>();
-		   try {
-		      File file = new File(filename);
-		      FileReader reader = new FileReader(file);
-		      BufferedReader br = new BufferedReader(reader);
-		      while ((newLine = br.readLine()) != null) {
-		         String[] parts = newLine.split("\\s+");
-		         Integer[] temp = new Integer[parts.length];
-		         for(int i = 0; i < parts.length; i ++){
-		            Integer num = new Integer(parts[i]);
-		            temp[i] = num;
-		         }
-		         list.add(temp);
-
-		      }
-		   }
-		   catch (FileNotFoundException e) {
-		      return list;
-		   } catch (IOException e) {
-		      return list;
-		   }
-
-		   return list;
-
+		String newLine;
+		ArrayList<Integer[]> list = new ArrayList<>();
+		try {
+			File file = new File(filename);
+			FileReader reader = new FileReader(file);
+			BufferedReader br = new BufferedReader(reader);
+			while ((newLine = br.readLine()) != null) {
+				String[] parts = newLine.split("\\s+");
+				Integer[] temp = new Integer[parts.length];
+				for(int i = 0; i < parts.length; i ++){
+					Integer num = new Integer(parts[i]);
+					temp[i] = num;
+				}
+				list.add(temp);
+			}
 		}
+		catch (FileNotFoundException e) {
+			return list;
+		} catch (IOException e) {
+			return list;
+		}
+
+		return list;
+
+	}
 
 
 	public static class ArrayComparator implements Comparator<Integer> {
@@ -181,7 +199,7 @@ public class LargestNumberSolver {
 			number.append(o2);
 			number2.append(o2);
 			number2.append(o1);
-			return number2.compareTo(number);
+			return Integer.compare(Integer.parseInt(number2.toString()), Integer.parseInt(number.toString()));
 		}
 
 	}
@@ -196,9 +214,7 @@ public class LargestNumberSolver {
 				number.append(i);
 			for (Integer j : (ArrayList<Integer>) o2)
 				number2.append(j);
-			return number2.compareTo(number);
+			return Integer.compare(Integer.parseInt(number2.toString()), Integer.parseInt(number.toString()));
 		}
-
 	}
 }
-
