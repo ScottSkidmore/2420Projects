@@ -23,7 +23,8 @@ public class ArrayListSorter<T> {
 	 * @param list the array being sorted
 	 */
 	public static <T extends Comparable<? super T>> void mergesort(ArrayList<T> list) {
-		mergesortRun(list, 0, list.size() - 1);
+		ArrayList<T> tempArray = new ArrayList<>(list.size());
+		mergesortRun(list, 0, list.size() - 1,tempArray);
 	}
 
 	/**
@@ -37,27 +38,28 @@ public class ArrayListSorter<T> {
 	 * @param low  the lower index of the current array
 	 * @param high the high index of the current array
 	 */
-	private static <T extends Comparable<? super T>> void mergesortRun(ArrayList<T> list, int low, int high) {
+	private static <T extends Comparable<? super T>> void mergesortRun(ArrayList<T> list, int low, int high,ArrayList<T> tempArray) {
 		if (high - low <= insertionPoint) {
-			for (int i = low + 1; i <= high; i++) {
-				int pos1 = i - 1;
-				int pos2 = i;
-				while (list.get(pos1).compareTo(list.get(pos2)) > 0) {
-					T temp = list.get(pos1);
-					list.set(pos1, list.get(pos2));
-					list.set(pos2, temp);
-					if (pos1 > low) {
-						pos2 = pos2 - 1;
-						pos1 = pos1 - 1;
+			int lower = low + 1;
+			while ( lower <= high) {
+				int first = lower - 1;
+				int second = lower;
+				while (list.get(first).compareTo(list.get(second)) > 0) {
+					T tempElement = list.get(first);
+					list.set(first, list.get(second));
+					list.set(second, tempElement);
+					if (first > low) {
+						second = second - 1;
+						first = first - 1;
 					}
 				}
+				lower++;
 			}
 		} else {
 			int middle = (low + high) / 2;
-			mergesortRun(list, low, middle);
-			mergesortRun(list, middle + 1, high);
-			ArrayList<T> temp = new ArrayList<>(high - low + 1);
-			merge(list, low, middle, high, temp);
+			mergesortRun(list, low, middle,tempArray);
+			mergesortRun(list, middle + 1, high,tempArray);
+			merge(list, low, middle, high, tempArray);
 		}
 	}
 
@@ -70,31 +72,31 @@ public class ArrayListSorter<T> {
 	 * @param low    the low index of sub array or full array
 	 * @param middle the middle index of array or sub array
 	 * @param high   the high index of array or sub array
-	 * @param temp   a temporary array to hold values
+	 * @param tempArray   a temporary array to hold values
 	 */
-	private static <T extends Comparable<? super T>> void merge(ArrayList<T> list, int low, int middle, int high,
-			ArrayList<T> temp) {
-		int i = low;
-		int j = middle + 1;
-		while (i <= middle && j <= high) {
-			if (list.get(i).compareTo(list.get(j)) <= 0) {
-				temp.add(list.get(i));
-				i++;
+	private static <T extends Comparable<? super T>> void merge(ArrayList<T> list, int low, int middle, int high,ArrayList<T> tempArray) {
+		tempArray.clear();
+		int lower = low;
+		int mid = middle + 1;
+		while (lower <= middle && mid <= high) {
+			if (list.get(lower).compareTo(list.get(mid)) <= 0) {
+				tempArray.add(list.get(lower));
+				lower++;
 			} else {
-				temp.add(list.get(j));
-				j++;
+				tempArray.add(list.get(mid));
+				mid++;
 			}
 		}
-		while (i <= middle) {
-			temp.add(list.get(i));
-			i++;
+		while (lower <= middle) {
+			tempArray.add(list.get(lower));
+			lower++;
 		}
-		while (j <= high) {
-			temp.add(list.get(j));
-			j++;
+		while (mid <= high) {
+			tempArray.add(list.get(mid));
+			mid++;
 		}
-		for (int q = 0; q < temp.size(); q++) {
-			list.set(low + q, temp.get(q));
+		for (int i = 0; i < tempArray.size(); i++) {
+			list.set(low + i, tempArray.get(i));
 		}
 	}
 
@@ -181,15 +183,15 @@ public class ArrayListSorter<T> {
 		//int pivotIndex = middlePivot(list, low, high);
 		T pickPivot = list.get(pivotIndex);
 		flip(list, pivotIndex, high);
-		int i = low - 1;
-		for (int j = low; j < high; j++) {
-			if (list.get(j).compareTo(pickPivot) <= 0) {
-				i++;
-				flip(list, i, j);
+		int lower = low - 1;
+		for (int i = low; i < high; i++) {
+			if (list.get(i).compareTo(pickPivot) <= 0) {
+				lower++;
+				flip(list, lower, i);
 			}
 		}
-		flip(list, i + 1, high);
-		return i + 1;
+		flip(list, lower + 1, high);
+		return lower + 1;
 	}
 
 	/**
@@ -197,13 +199,13 @@ public class ArrayListSorter<T> {
 	 * 
 	 * @param <T>  Generic type of the array
 	 * @param list the array being sorted
-	 * @param i    the index of first item being flipped
-	 * @param j    the index of second item being flipped
+	 * @param first    the index of first item being flipped
+	 * @param second    the index of second item being flipped
 	 */
-	private static <T extends Comparable<? super T>> void flip(ArrayList<T> list, int i, int j) {
-		T holder = list.get(i);
-		list.set(i, list.get(j));
-		list.set(j, holder);
+	private static <T extends Comparable<? super T>> void flip(ArrayList<T> list, int first, int second) {
+		T holder = list.get(first);
+		list.set(first, list.get(second));
+		list.set(second, holder);
 	}
 
 	/**
