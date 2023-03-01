@@ -37,7 +37,7 @@ public class SinglyLinkedList<E> implements List<E>{
 
     @Override
     public void insert(int index, E element) throws IndexOutOfBoundsException {
-        if(index >= size) throw new IndexOutOfBoundsException("Index out of range of list.");
+        if(index > size) throw new IndexOutOfBoundsException("Index out of range of list.");
 
         Node<E> newNode = new Node(element);
         Node<E> currentNode = head;
@@ -88,8 +88,17 @@ public class SinglyLinkedList<E> implements List<E>{
 
     @Override
     public int indexOf(Object element) {
-        return 0;
+        Node<E> startData = head;
+        if(head.equals(element)) return 0;
+        for(int i = 1; i < size; i++){
+            if(startData.nextNode.data.equals(element)){
+                return i;
+            }
+            startData = startData.nextNode;
+        }
+    return -1;
     }
+
 
     @Override
     public int size() {
