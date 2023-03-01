@@ -15,6 +15,10 @@ public class SinglyLinkedList<E> implements List<E>{
     private Node<E> tail;
 
 
+
+
+
+
     private static class Node<E>{
         private E data;
         private Node<E> nextNode;
@@ -26,51 +30,59 @@ public class SinglyLinkedList<E> implements List<E>{
 
     public SinglyLinkedList(){
     }
+	@Override
+	public void insertFirst(E element) {
+		 Node<E> newNode = new Node<E>(element);
+		 	newNode.nextNode=head;
+	        head=newNode;
+	        size++;
+		
+	}
 
-    @Override
-    public void insertFirst(E element) {
-        Node<E> newNode = new Node(element);
-        newNode.nextNode = head;
-        head = newNode;
-        size++;
-    }
-
-    @Override
     public void insert(int index, E element) throws IndexOutOfBoundsException {
-        if(index > size) throw new IndexOutOfBoundsException("Index out of range of list.");
-
-        Node<E> newNode = new Node(element);
-        Node<E> currentNode = head;
-        int OGsize = this.size;
-        int newSize = index;
-        this.size = newSize;
-
-        while(it.hasNext()){
-            currentNode = (Node<E>)it.next();
-            if(!it.hasNext()){
-                currentNode.nextNode = newNode;
-                this.size = OGsize+1;
-                newNode.nextNode = (Node<E>)it.next();
-            }
+    	System.out.println(size);
+    	it=iterator();
+    	Node<E> insertNode=new Node<E>(element);
+        if(index > size||index<0) throw new IndexOutOfBoundsException("Index out of range of list.");
+        if(index==0) {
+        	insertFirst(element);
         }
+        if(index==1) {
+        	insertNode.nextNode=head.nextNode;
+        	head.nextNode=insertNode;
+        	size++;
+        }
+        for (int i=2;i<index-1;i++) {
+        	if(index==i) {
+        		Node<E> temp=(Node<E>) it.next();
+        		insertNode.nextNode=temp.nextNode;
+        		temp.nextNode=insertNode;
+        		size++;
+        	}
+        	it.next();
+        }
+       
 
     }
 
     @Override
     public E getFirst() throws NoSuchElementException {
-        return (E)head;
+        return head.data;
     }
 
     @Override
     public E get(int index) throws IndexOutOfBoundsException {
-        if(index >= size) throw new IndexOutOfBoundsException("Index out of range of list.");
+    	 if(index > size) throw new IndexOutOfBoundsException("Index out of range of list.");
 
-        Iterator<E> it = iterator();
-        Node<E> indexNode = head;
-        for(int i = 0; i <= index; i++){
-            indexNode = (Node<E>) it.next();
-        }
-        return (E)indexNode;
+         Iterator<E> it = iterator();
+         Node<E> indexNode=head;
+         if(index==0) {
+        	 return indexNode.data;
+         }
+         for(int i = 1; i <= index; i++){
+             indexNode = (Node<E>) it.next();
+         }
+         return indexNode.data;
     }
 
     @Override
@@ -78,7 +90,7 @@ public class SinglyLinkedList<E> implements List<E>{
         Node<E> newNode = head;
         head = head.nextNode;
         size--;
-        return (E)newNode;
+        return (E) newNode;
     }
 
     @Override
@@ -88,7 +100,7 @@ public class SinglyLinkedList<E> implements List<E>{
 
     @Override
     public int indexOf(Object element) {
-        Node<E> startData = head;
+    	Node<E> startData = head;
         if(head.equals(element)) return 0;
         for(int i = 1; i < size; i++){
             if(startData.nextNode.data.equals(element)){
@@ -98,7 +110,6 @@ public class SinglyLinkedList<E> implements List<E>{
         }
     return -1;
     }
-
 
     @Override
     public int size() {
@@ -132,7 +143,7 @@ public class SinglyLinkedList<E> implements List<E>{
 
 
         private SinglyLinkedListIterator(){
-            index = 0;
+            index =0;
         }
         @Override
         public boolean hasNext() {
@@ -144,7 +155,7 @@ public class SinglyLinkedList<E> implements List<E>{
             if(!hasNext()) throw new NoSuchElementException();
             currentNode = currentNode.nextNode;
             index++;
-            return (E) currentNode;
+            return (E)currentNode;
         }
 
         @Override
@@ -152,4 +163,10 @@ public class SinglyLinkedList<E> implements List<E>{
             Iterator.super.remove();
         }
     }
+
+
+
+
+
+
 }
