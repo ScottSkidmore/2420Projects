@@ -40,7 +40,6 @@ public class SinglyLinkedList<E> implements List<E>{
 	}
 
     public void insert(int index, E element) throws IndexOutOfBoundsException {
-    	System.out.println(size);
     	it=iterator();
     	Node<E> insertNode=new Node<E>(element);
         if(index > size||index<0) throw new IndexOutOfBoundsException("Index out of range of list.");
@@ -52,7 +51,8 @@ public class SinglyLinkedList<E> implements List<E>{
         	head.nextNode=insertNode;
         	size++;
         }
-        for (int i=2;i<index-1;i++) {
+        else {
+        for (int i=2;i<=index;i++) {
         	if(index==i) {
         		Node<E> temp=(Node<E>) it.next();
         		insertNode.nextNode=temp.nextNode;
@@ -60,6 +60,7 @@ public class SinglyLinkedList<E> implements List<E>{
         		size++;
         	}
         	it.next();
+        }
         }
        
 
@@ -95,7 +96,22 @@ public class SinglyLinkedList<E> implements List<E>{
 
     @Override
     public E delete(int index) throws IndexOutOfBoundsException {
-        return null;
+    	it=iterator();
+    	E temp=get(index);
+        if(index > size||index<0) throw new IndexOutOfBoundsException("Index out of range of list.");
+        if(index==0) {
+        	it.remove();
+        }
+        else {
+        for (int i=0;i<=index;i++) {
+        	if(index==i) {
+        		it.remove();
+        	}
+        	it.next();
+        }
+        }
+        return temp;
+       
     }
 
     @Override
@@ -140,6 +156,7 @@ public class SinglyLinkedList<E> implements List<E>{
 
         private int index;
         private Node<E> currentNode = head;
+        private Node<E> preNode = null;
 
 
         private SinglyLinkedListIterator(){
@@ -153,6 +170,7 @@ public class SinglyLinkedList<E> implements List<E>{
         @Override
         public E next() {
             if(!hasNext()) throw new NoSuchElementException();
+            preNode=currentNode;
             currentNode = currentNode.nextNode;
             index++;
             return (E)currentNode;
@@ -160,7 +178,19 @@ public class SinglyLinkedList<E> implements List<E>{
 
         @Override
         public void remove() {
-            Iterator.super.remove();
+        	if(head==null)throw new NoSuchElementException("list is empty");
+        	if(head.nextNode==null) {
+        		head=null;
+        		size--;
+        	}
+        	if(currentNode==head) {
+        		head=currentNode.nextNode;
+        		size--;
+        	}
+        	else {
+        	preNode.nextNode=currentNode.nextNode;
+        	size--;
+        	}
         }
     }
 
