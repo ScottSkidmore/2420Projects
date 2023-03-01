@@ -63,52 +63,52 @@ class SinglyLinkedListTest<E> {
     }
 
     @Test
-    void getTestOnSmall() {
+    void testGetOnSmall() {
         assertEquals(5, smallIntList.get(4));
     }
 
     @Test
-    void getTestOnBig() {
+    void testGetOnBig() {
         assertEquals(35, bigIntList.get(4));
     }
 
     @Test
-    void getAtEnds() {
+    void testGetAtEnds() {
         assertEquals(39, bigIntList.get(0));
         assertEquals(0, bigIntList.get(39));
 
     }
 
     @Test
-    void getFirstTest() {
+    void testgetFirst() {
         assertEquals(39, bigIntList.getFirst());
         assertEquals(9, smallIntList.getFirst());
     }
 
     @Test
-    void testIsEmptyOnSmall() {
+    void isEmptyTestOnSmall() {
         assertEquals(false, smallIntList.isEmpty());
     }
 
     @Test
-    void isEmptyTestOnEmpty() {
+    void testIsEmptyOnEmpty() {
         assertEquals(true, emptyList.isEmpty());
     }
 
     @Test
-    void clearTestOnSmall() {
+    void testClearOnSmall() {
         smallIntList.clear();
         assertEquals("[]", Arrays.toString(smallIntList.toArray()));
     }
 
     @Test
-    void clearTestOnPoint() {
+    void testClearOnPoint() {
         pointList.clear();
         assertEquals("[]", Arrays.toString(pointList.toArray()));
     }
 
     @Test
-    void toArrayTest() { // should be good
+    void testToArray() { // should be good
         assertEquals("[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]", Arrays.toString(smallIntList.toArray()));
     }
 
@@ -118,7 +118,7 @@ class SinglyLinkedListTest<E> {
     }
 
     @Test
-    void indexOfTestOnBig() {
+    void testIndexOfOnBig() {
         System.out.println(Arrays.toString(bigIntList.toArray()));
         assertEquals(0, bigIntList.indexOf(39));
     }

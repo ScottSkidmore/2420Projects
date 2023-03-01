@@ -104,7 +104,6 @@ public class SinglyLinkedList<E> implements List<E>{
             }
         }
         return temp;
-
     }
 
     @Override
