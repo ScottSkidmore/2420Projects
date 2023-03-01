@@ -4,26 +4,21 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
-public class SinglyLinkedList<T> implements List{
+public class SinglyLinkedList<E> implements List<E>{
 
-    private T data;
+    private E data;
     int size = 0;
-    private Node<T> head;
+    private Node<E> head;
 
-    Iterator<T> it = iterator();
+    Iterator<E> it = iterator();
 
-    private Node<T> tail;
-
-    Iterator balls = new Iterator();
+    private Node<E> tail;
 
 
-
-
-
-    private static class Node<T>{
-        private T data;
-        private Node<T> nextNode;
-        public Node (T data){
+    private static class Node<E>{
+        private E data;
+        private Node<E> nextNode;
+        public Node (E data){
             this.nextNode = null;
             this.data = data;
         }
@@ -33,55 +28,61 @@ public class SinglyLinkedList<T> implements List{
     }
 
     @Override
-    public void insertFirst(Object element) {
-        Node<T> newNode = new Node(element);
+    public void insertFirst(E element) {
+        Node<E> newNode = new Node(element);
         newNode.nextNode = head;
+        head = newNode;
         size++;
     }
 
     @Override
-    public void insert(int index, Object element) throws IndexOutOfBoundsException {
-        if(index > size) throw new IndexOutOfBoundsException("Index out of range of list.");
+    public void insert(int index, E element) throws IndexOutOfBoundsException {
+        if(index >= size) throw new IndexOutOfBoundsException("Index out of range of list.");
 
-        Node<T> newNode = new Node(element);
-        Node<T> currentNode = head;
+        Node<E> newNode = new Node(element);
+        Node<E> currentNode = head;
         int OGsize = this.size;
         int newSize = index;
         this.size = newSize;
 
         while(it.hasNext()){
-            currentNode = (Node<T>)it.next();
+            currentNode = (Node<E>)it.next();
             if(!it.hasNext()){
                 currentNode.nextNode = newNode;
                 this.size = OGsize+1;
-                newNode.nextNode = (Node<T>)it.next();
+                newNode.nextNode = (Node<E>)it.next();
             }
         }
 
     }
 
     @Override
-    public Object getFirst() throws NoSuchElementException {
-        return head;
+    public E getFirst() throws NoSuchElementException {
+        return (E)head;
     }
 
     @Override
-    public Object get(int index) throws IndexOutOfBoundsException {
+    public E get(int index) throws IndexOutOfBoundsException {
+        if(index >= size) throw new IndexOutOfBoundsException("Index out of range of list.");
 
-
-        throw new IndexOutOfBoundsException ("Index not valid");
+        Iterator<E> it = iterator();
+        Node<E> indexNode = head;
+        for(int i = 0; i <= index; i++){
+            indexNode = (Node<E>) it.next();
+        }
+        return (E)indexNode;
     }
 
     @Override
-    public Object deleteFirst() throws NoSuchElementException {
-        Node<T> newNode = head;
+    public E deleteFirst() throws NoSuchElementException {
+        Node<E> newNode = head;
         head = head.nextNode;
         size--;
-        return newNode;
+        return (E)newNode;
     }
 
     @Override
-    public Object delete(int index) throws IndexOutOfBoundsException {
+    public E delete(int index) throws IndexOutOfBoundsException {
         return null;
     }
 
@@ -112,13 +113,13 @@ public class SinglyLinkedList<T> implements List{
 
     @Override
     public Iterator iterator() {
-        return new SinglyLinkedListIterator;
+        return new SinglyLinkedListIterator();
     }
 
-    public class SinglyLinkedListIterator implements Iterator<T>{
+    public class SinglyLinkedListIterator implements Iterator<E>{
 
         private int index;
-        private Node<T> currentNode = head;
+        private Node<E> currentNode = head;
 
 
         private SinglyLinkedListIterator(){
@@ -130,11 +131,11 @@ public class SinglyLinkedList<T> implements List{
         }
 
         @Override
-        public T next() {
+        public E next() {
             if(!hasNext()) throw new NoSuchElementException();
             currentNode = currentNode.nextNode;
             index++;
-            return (T) currentNode;
+            return (E) currentNode;
         }
 
         @Override
