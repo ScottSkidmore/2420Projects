@@ -18,6 +18,7 @@ public class WebBrowser<URL> {
 	}
 
 	public void visit(URL webpage) {
+		backStack.push(webpage);
 		forwardStack.clear();
 	}
 
@@ -40,14 +41,6 @@ public class WebBrowser<URL> {
 
 	}
 	public SinglyLinkedList<URL> history(){
-		SinglyLinkedList<URL> temp=new SinglyLinkedList<URL>();
-		for(int i=0;i<backStack.size();i++) {
-			if(i==0) {
-				temp.insertFirst(backStack.pop());
-			}else {
-			temp.insert(i, backStack.pop());
-			}
-		}
-		return temp;
+		return backStack.get();
 	}
 }
