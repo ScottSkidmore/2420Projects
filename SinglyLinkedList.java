@@ -1,5 +1,6 @@
 package assign06;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.NoSuchElementException;
@@ -28,6 +29,7 @@ public class SinglyLinkedList<E> implements List<E>{
     	head=null;
     	tail=null;
     	size=0;
+    	it=iterator();
     }
 
     @Override
@@ -114,6 +116,7 @@ public class SinglyLinkedList<E> implements List<E>{
             for (int i=0;i<=index;i++) {
                 if(index==i) {
                     it.remove();
+                    break;
                 }
                 it.next();
             }
@@ -185,7 +188,7 @@ public class SinglyLinkedList<E> implements List<E>{
         }
         @Override
         public boolean hasNext() {
-        	if (currentNode==null) {
+        	if (currentNode.nextNode==null) {
         		return false;
         	}
             return true;
@@ -207,29 +210,28 @@ public class SinglyLinkedList<E> implements List<E>{
         	if(remove)throw new IllegalStateException("cannot remove twice");
             if(size==0)throw new NoSuchElementException("list is empty");
             remove=true;
-            if(head.nextNode==null) {
-                head=null;
-                size--;
-            }
-            else if(currentNode==head) {
+            if(currentNode==head) {
             	if(hasNext()) {
                 	temp=currentNode.nextNode;
+                	head=currentNode.nextNode;
+                    size--;
+                    currentNode=temp;
                 	}else {
-                		temp=null;
+                		head=null;
+                        size--;
+                        currentNode=head;
                 	}
-                head=currentNode.nextNode;
-                size--;
-                currentNode=temp;
             }
             else {
             	if(hasNext()) {
-            	temp=currentNode.nextNode;
+            	preNode.nextNode=currentNode.nextNode;
+            	currentNode=null;
+            	size--;
             	}else {
-            		temp=null;
+            		currentNode=null;
+            		size--;
             	}
-                preNode.nextNode=currentNode.nextNode;
-                size--;
-                currentNode=temp;
+                
             }
             remove=true;
        

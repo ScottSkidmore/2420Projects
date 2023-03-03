@@ -12,8 +12,11 @@ public class WebBrowser<URL> {
 	}
 
 	public WebBrowser(SinglyLinkedList<URL> history) {
-		for (int i = 0; i < history.size(); i++) {
-			backStack.push(history.delete(history.size() - i));
+		backStack = new LinkedListStack<URL>();
+		forwardStack = new LinkedListStack<URL>();
+		int temp=history.size();
+		for (int i = 0; i < temp; i++) {
+			backStack.push(history.delete((temp-1) - i));
 		}
 	}
 
@@ -42,5 +45,8 @@ public class WebBrowser<URL> {
 	}
 	public SinglyLinkedList<URL> history(){
 		return backStack.get();
+	}
+	public SinglyLinkedList getHistory() {
+		return history();
 	}
 }
