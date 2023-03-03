@@ -20,6 +20,8 @@ class SinglyLinkedListTest<E> {
 	SinglyLinkedList<Integer> emptyList = new SinglyLinkedList<>();
 
 	LinkedListStack<URL> UList = new LinkedListStack<URL>();
+	
+	ArrayStack<URL> AStack=new ArrayStack<URL>();
 
 	SinglyLinkedListTest() throws MalformedURLException {
 	}
@@ -330,88 +332,81 @@ class SinglyLinkedListTest<E> {
 
 	}
 	@Test
-	void timingTestPushLinked() throws MalformedURLException {
+	void timingTestPopLinked() throws MalformedURLException {
+		for (int j=0;j<1000000;j++) {
+			UList.push(first);
+		}
+		int time=10000;
+		for(int i=0;i<10;i++) {
+			double startTime=System.nanoTime();
+			for (int j=0;j<time;j++) {
+				UList.pop();
+			}
+			double endTime=System.nanoTime();
+			System.out.println("popLinked"+" "+Double.toString(endTime-startTime));
+			time=time+10000;
+			}
+
+	}
+	@Test
+	void timingTestpeekLinked() throws MalformedURLException {
+		UList.push(first);
 		int time=10000;
 		for(int i=0;i<10;i++) {
 		double startTime=System.nanoTime();
 		for (int j=0;j<time;j++) {
-			UList.push(first);
+			UList.peek();
 		}
 		double endTime=System.nanoTime();
-		System.out.println("pushLinked"+" "+Double.toString(endTime-startTime));
+		System.out.println("peekLinked"+" "+Double.toString(endTime-startTime));
 		time=time+10000;
 		}
 
 	}
 	@Test
-	void timingTestPushLinked() throws MalformedURLException {
+	void timingTestPushArray() throws MalformedURLException {
 		int time=10000;
 		for(int i=0;i<10;i++) {
 		double startTime=System.nanoTime();
 		for (int j=0;j<time;j++) {
-			UList.push(first);
+			AStack.push(first);
 		}
 		double endTime=System.nanoTime();
-		System.out.println("pushLinked"+" "+Double.toString(endTime-startTime));
+		System.out.println("pushArray"+" "+Double.toString(endTime-startTime));
 		time=time+10000;
 		}
 
 	}
 	@Test
-	void timingTestPushLinked() throws MalformedURLException {
+	void timingTestPopArray() throws MalformedURLException {
+		for (int j=0;j<1000000;j++) {
+			AStack.push(first);
+		}
 		int time=10000;
 		for(int i=0;i<10;i++) {
-		double startTime=System.nanoTime();
-		for (int j=0;j<time;j++) {
-			UList.push(first);
-		}
-		double endTime=System.nanoTime();
-		System.out.println("pushLinked"+" "+Double.toString(endTime-startTime));
-		time=time+10000;
+			double startTime=System.nanoTime();
+			for (int j=0;j<time;j++) {
+				AStack.pop();
+			}
+			double endTime=System.nanoTime();
+			System.out.println("popArray"+" "+Double.toString(endTime-startTime));
+			time=time+10000;
 		}
 
 	}
 	@Test
-	void timingTestPushLinked() throws MalformedURLException {
+	void timingTestPeekArray() throws MalformedURLException {
+		AStack.push(first);
 		int time=10000;
 		for(int i=0;i<10;i++) {
 		double startTime=System.nanoTime();
 		for (int j=0;j<time;j++) {
-			UList.push(first);
+			AStack.peek();
 		}
 		double endTime=System.nanoTime();
-		System.out.println("pushLinked"+" "+Double.toString(endTime-startTime));
+		System.out.println("peekArray"+" "+Double.toString(endTime-startTime));
 		time=time+10000;
 		}
-
-	}
-	@Test
-	void timingTestPushLinked() throws MalformedURLException {
-		int time=10000;
-		for(int i=0;i<10;i++) {
-		double startTime=System.nanoTime();
-		for (int j=0;j<time;j++) {
-			UList.push(first);
-		}
-		double endTime=System.nanoTime();
-		System.out.println("pushLinked"+" "+Double.toString(endTime-startTime));
-		time=time+10000;
-		}
-
-	}
-	@Test
-	void timingTestPushLinked() throws MalformedURLException {
-		int time=10000;
-		for(int i=0;i<10;i++) {
-		double startTime=System.nanoTime();
-		for (int j=0;j<time;j++) {
-			UList.push(first);
-		}
-		double endTime=System.nanoTime();
-		System.out.println("pushLinked"+" "+Double.toString(endTime-startTime));
-		time=time+10000;
-		}
-
 	}
 
 }
