@@ -3,10 +3,11 @@ package assign06;
 import java.util.NoSuchElementException;
 
 public class LinkedListStack<E> implements Stack<E>{
-
-    public LinkedListStack(){
-    }
     private SinglyLinkedList<E> stack;
+    public LinkedListStack(){
+    	stack=new SinglyLinkedList();
+    }
+
     @Override
     public void clear() {
         stack.clear();

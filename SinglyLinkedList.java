@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 public class SinglyLinkedList<E> implements List<E>{
 
     private E data;
-    int size = 0;
+    int size;
     private Node<E> head;
 
     Iterator<E> it = iterator();
@@ -25,6 +25,9 @@ public class SinglyLinkedList<E> implements List<E>{
     }
 
     public SinglyLinkedList(){
+    	head=null;
+    	tail=null;
+    	size=0;
     }
 
     @Override
@@ -84,10 +87,15 @@ public class SinglyLinkedList<E> implements List<E>{
 
     @Override
     public E deleteFirst() throws NoSuchElementException {
+    	if(head.nextNode==null) {
+    		 Node<E> newNode = head;
+    	        size--;
+    	        return newNode.data;
+    	}
         Node<E> newNode = head;
         head = head.nextNode;
         size--;
-        return (E) newNode;
+        return newNode.data;
     }
 
     @Override
@@ -129,7 +137,7 @@ public class SinglyLinkedList<E> implements List<E>{
 
     @Override
     public boolean isEmpty() {
-        if(head == null && tail == null){
+        if(head==(null)&& tail==(null)&& size==0){
             return true;
         }
         else return false;
@@ -139,6 +147,7 @@ public class SinglyLinkedList<E> implements List<E>{
     public void clear() {
         head=null;
         tail=null;
+        size=0;
     }
 
     @Override
@@ -168,7 +177,10 @@ public class SinglyLinkedList<E> implements List<E>{
         }
         @Override
         public boolean hasNext() {
-            return index < size;
+        	if (currentNode.nextNode==null) {
+        		return false;
+        	}
+            return true;
         }
 
         @Override
@@ -180,8 +192,8 @@ public class SinglyLinkedList<E> implements List<E>{
             return (E)currentNode;
         }
 
-        public void remove() {
-            if(head==null)throw new NoSuchElementException("list is empty");
+        public void remove()throws IllegalStateException {
+            if(size==0)throw new NoSuchElementException("list is empty");
             if(head.nextNode==null) {
                 head=null;
                 size--;

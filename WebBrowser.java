@@ -12,7 +12,7 @@ public class WebBrowser<URL> {
 	}
 
 	public WebBrowser(SinglyLinkedList<URL> history) {
-		for (int i = 0; i < history.size(); i++) {
+		for (int i = 0; i < history.size()-1; i++) {
 			backStack.push(history.delete(history.size() - i));
 		}
 	}
