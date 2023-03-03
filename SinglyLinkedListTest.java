@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,6 +18,8 @@ class SinglyLinkedListTest<E> {
     SinglyLinkedList<Point> pointList = new SinglyLinkedList<>();
 
     SinglyLinkedList<Integer> emptyList = new SinglyLinkedList<>();
+
+    LinkedListStack<URL>UList= new LinkedListStack<URL>();
 
 
     @BeforeEach
@@ -80,7 +84,7 @@ class SinglyLinkedListTest<E> {
     }
 
     @Test
-    void testgetFirst() {
+    void testGetFirst() {
         assertEquals(39, bigIntList.getFirst());
         assertEquals(9, smallIntList.getFirst());
     }
@@ -119,9 +123,69 @@ class SinglyLinkedListTest<E> {
 
     @Test
     void testIndexOfOnBig() {
-        System.out.println(Arrays.toString(bigIntList.toArray()));
         assertEquals(0, bigIntList.indexOf(39));
     }
+
+    @Test
+    void testDeleteFirstOnSmall(){
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+        smallIntList.deleteFirst();
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+        assertEquals(8, smallIntList.getFirst());
+
+    }
+
+    @Test
+    void testDeleteOnSmall(){
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+        smallIntList.delete(2);
+        smallIntList.delete(2);
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+        assertEquals(6, smallIntList.get(2));
+    }
+
+
+
+    @Test
+    void testRemoveOnSmall(){
+
+    }
+
+    @Test
+    void testSizeOnEmpty() {
+        assertEquals(0,emptyList.size());
+    }
+    @Test
+    void testSizeOnSmall() {
+        smallIntList.insertFirst(1);
+        smallIntList.insertFirst(2);
+        smallIntList.insertFirst(3);
+        assertEquals(13,smallIntList.size());
+    }
+
+    @Test
+    void testLinkedListStack() throws MalformedURLException {
+        URL firstU=new URL("http://example.com/");
+        UList.push(firstU);
+        assertEquals(0, bigIntList.indexOf(39));
+    }
+
+    @Test
+    void testDeleteOnOne(){
+        SinglyLinkedList<Integer> single = new SinglyLinkedList<>();
+        single.insertFirst(1);
+        System.out.println(Arrays.toString(single.toArray()));
+        single.delete(1);
+    }
+    @Test
+    void testDeleteOnFirstElement(){
+        smallIntList.delete(1);
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+    }
+
+
+
+
 
 
 
