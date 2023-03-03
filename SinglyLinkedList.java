@@ -52,7 +52,7 @@ public class SinglyLinkedList<E> implements List<E>{
         }
         for (int i=2;i<=index;i++) {
             if(index==i) {
-                Node<E> temp=(Node<E>) it.next();
+                Node<E> temp=((SinglyLinkedListIterator) it).getCurrentNode();
                 insertNode.nextNode=temp.nextNode;
                 temp.nextNode=insertNode;
                 size++;
@@ -73,16 +73,16 @@ public class SinglyLinkedList<E> implements List<E>{
     @Override
     public E get(int index) throws IndexOutOfBoundsException {
         if(index > size) throw new IndexOutOfBoundsException("Index out of range of list.");
-
+        E temp=null;
         Iterator<E> it = iterator();
         Node<E> indexNode=head;
         if(index==0) {
             return indexNode.data;
         }
         for(int i = 1; i <= index; i++){
-            indexNode = (Node<E>) it.next();
+            temp=it.next();
         }
-        return indexNode.data;
+        return temp;
     }
 
     @Override
@@ -160,7 +160,7 @@ public class SinglyLinkedList<E> implements List<E>{
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<E> iterator() {
         return new SinglyLinkedListIterator();
     }
 
@@ -175,6 +175,9 @@ public class SinglyLinkedList<E> implements List<E>{
         private SinglyLinkedListIterator(){
             index =0;
         }
+        public Node<E> getCurrentNode(){
+        	return currentNode.nextNode;
+        }
         @Override
         public boolean hasNext() {
         	if (currentNode.nextNode==null) {
@@ -186,10 +189,12 @@ public class SinglyLinkedList<E> implements List<E>{
         @Override
         public E next() {
             if(!hasNext()) throw new NoSuchElementException();
+            else {
             preNode=currentNode;
             currentNode = currentNode.nextNode;
             index++;
-            return (E)currentNode;
+            return currentNode.data;
+            }
         }
 
         public void remove()throws IllegalStateException {
