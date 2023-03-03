@@ -21,6 +21,9 @@ class SinglyLinkedListTest<E> {
 
     LinkedListStack<URL>UList= new LinkedListStack<URL>();
 
+    SinglyLinkedListTest() throws MalformedURLException {
+    }
+
 
     @BeforeEach
     void setUp(){
@@ -141,15 +144,10 @@ class SinglyLinkedListTest<E> {
         smallIntList.delete(2);
         smallIntList.delete(2);
         System.out.println(Arrays.toString(smallIntList.toArray()));
-        assertEquals(6, smallIntList.get(2));
+        assertEquals(5, smallIntList.get(2));
     }
 
 
-
-    @Test
-    void testRemoveOnSmall(){
-
-    }
 
     @Test
     void testSizeOnEmpty() {
@@ -175,13 +173,43 @@ class SinglyLinkedListTest<E> {
         SinglyLinkedList<Integer> single = new SinglyLinkedList<>();
         single.insertFirst(1);
         System.out.println(Arrays.toString(single.toArray()));
-        single.delete(1);
+        single.delete(0);
+        System.out.println(Arrays.toString(single.toArray()));
     }
     @Test
     void testDeleteOnFirstElement(){
-        smallIntList.delete(1);
+        smallIntList.delete(0);
         System.out.println(Arrays.toString(smallIntList.toArray()));
     }
+
+    // ------------------------------------Web-Browser-Tests-------------------------------------
+
+    WebBrowser<URL> web = new WebBrowser<>();
+    URL first = new URL("https://www.google.com/");
+    URL second = new URL("https://www.Yahoo.com/");
+    URL third = new URL("https://www.Instagram.com/");
+    URL fourth = new URL("https://www.Twitter.com/");
+
+    @Test
+    void webBrowserHistoryTest(){
+        web.visit(first);
+        web.visit(second);
+        web.visit(third);
+        web.visit(fourth);
+        System.out.print(Arrays.toString(web.getHistory().toArray()));
+    }
+    @Test
+    void testWebBrowserBack(){
+        web.visit(first);
+        web.visit(second);
+        web.visit(third);
+        web.visit(fourth);
+        web.back();
+        web.back();
+        System.out.print(Arrays.toString(web.getHistory().toArray()));
+    }
+
+
 
 
 
