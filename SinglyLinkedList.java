@@ -170,6 +170,7 @@ public class SinglyLinkedList<E> implements List<E>{
         private Node<E> currentNode = head;
 
         private Node<E> preNode = null;
+        private boolean remove=false;
 
 
         private SinglyLinkedListIterator(){
@@ -193,12 +194,15 @@ public class SinglyLinkedList<E> implements List<E>{
             preNode=currentNode;
             currentNode = currentNode.nextNode;
             index++;
+            remove=false;
             return currentNode.data;
             }
         }
 
-        public void remove()throws IllegalStateException {
+        public void remove() {
+        	if(remove)throw new IllegalStateException("cannot remove twice");
             if(size==0)throw new NoSuchElementException("list is empty");
+            remove=true;
             if(head.nextNode==null) {
                 head=null;
                 size--;
@@ -211,6 +215,7 @@ public class SinglyLinkedList<E> implements List<E>{
                 preNode.nextNode=currentNode.nextNode;
                 size--;
             }
+            remove=true;
        
         }
     }
