@@ -138,12 +138,68 @@ class SinglyLinkedListTest<E> {
         assertEquals(0, bigIntList.indexOf(39));
     }
     @Test
-    void testLinkedListStack() throws MalformedURLException {
+    void testLinkedListStackPeekTest() throws MalformedURLException {
        URL firstU=new URL("http://example.com/");
        UList.push(firstU);
-        assertEquals(0, bigIntList.indexOf(39));
+        assertEquals(firstU,UList.peek());
+    }
+    @Test
+    void testLinkedListStackPopToEmptyTest() throws MalformedURLException {
+       URL firstU=new URL("http://example.com/");
+       UList.push(firstU);
+       UList.pop();
+       System.out.println(UList);
+       assertEquals(null,UList.peek());
+    }
+    @Test
+    void testLinkedListStackPushEmptyTest() throws MalformedURLException {
+       URL firstU=new URL("http://example.com/");
+       UList.push(firstU);
+       assertEquals(firstU,UList.peek());
+    }
+    @Test
+    void testLinkedListStackSizeTest() throws MalformedURLException {
+       URL firstU=new URL("http://example.com/");
+       UList.push(firstU);
+       assertEquals(1,UList.size());
+    }
+    @Test
+    void testLinkedListStackClearTest() throws MalformedURLException {
+       URL firstU=new URL("http://example.com/");
+       UList.push(firstU);
+       UList.clear();
+       assertEquals(null,UList.peek());
+    }
+    @Test
+    void testDeleteOnOne(){
+        SinglyLinkedList<Integer> single = new SinglyLinkedList<>();
+        single.insertFirst(1);
+        System.out.println(Arrays.toString(single.toArray()));
+        single.delete(1);
+    }
+    @Test
+    void testDeleteOnFirstElement(){
+        smallIntList.delete(1);
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+    }
+    @Test
+    void testDeleteFirstOnSmall(){
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+        smallIntList.deleteFirst();
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+        assertEquals(8, smallIntList.getFirst());
+
     }
 
+    @Test
+    void testDeleteOnSmall(){
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+        smallIntList.delete(2);
+        smallIntList.delete(2);
+        System.out.println(Arrays.toString(smallIntList.toArray()));
+        assertEquals(6, smallIntList.get(2));
+    }
+    
 
 
 }

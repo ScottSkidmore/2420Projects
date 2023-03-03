@@ -67,6 +67,9 @@ public class SinglyLinkedList<E> implements List<E>{
 
     @Override
     public E getFirst() throws NoSuchElementException {
+    	if(head==null) {
+    		return null;
+    	}
         return head.data;
     }
 
@@ -89,6 +92,7 @@ public class SinglyLinkedList<E> implements List<E>{
     public E deleteFirst() throws NoSuchElementException {
     	if(head.nextNode==null) {
     		 Node<E> newNode = head;
+    		 head=null;
     	        size--;
     	        return newNode.data;
     	}
@@ -181,7 +185,7 @@ public class SinglyLinkedList<E> implements List<E>{
         }
         @Override
         public boolean hasNext() {
-        	if (currentNode.nextNode==null) {
+        	if (currentNode==null) {
         		return false;
         	}
             return true;
@@ -193,13 +197,13 @@ public class SinglyLinkedList<E> implements List<E>{
             else {
             preNode=currentNode;
             currentNode = currentNode.nextNode;
-            index++;
             remove=false;
             return currentNode.data;
             }
         }
 
         public void remove() {
+        	Node<E>temp=null;
         	if(remove)throw new IllegalStateException("cannot remove twice");
             if(size==0)throw new NoSuchElementException("list is empty");
             remove=true;
@@ -207,13 +211,25 @@ public class SinglyLinkedList<E> implements List<E>{
                 head=null;
                 size--;
             }
-            if(currentNode==head) {
+            else if(currentNode==head) {
+            	if(hasNext()) {
+                	temp=currentNode.nextNode;
+                	}else {
+                		temp=null;
+                	}
                 head=currentNode.nextNode;
                 size--;
+                currentNode=temp;
             }
             else {
+            	if(hasNext()) {
+            	temp=currentNode.nextNode;
+            	}else {
+            		temp=null;
+            	}
                 preNode.nextNode=currentNode.nextNode;
                 size--;
+                currentNode=temp;
             }
             remove=true;
        

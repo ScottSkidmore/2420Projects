@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 public class LinkedListStack<E> implements Stack<E>{
     private SinglyLinkedList<E> stack;
     public LinkedListStack(){
-    	stack=new SinglyLinkedList();
+    	stack=new SinglyLinkedList<E>();
     }
 
     @Override
