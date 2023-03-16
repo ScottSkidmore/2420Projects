@@ -5,153 +5,204 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 /**
- * Contains several methods for solving problems on generic, directed, unweighted, sparse graphs.
+ * Contains several methods for solving problems on generic, directed,
+ * unweighted, sparse graphs.
  *
  * @author Erin Parker & ??
  * @version March 3, 2022
  */
 public class GraphUtility<Type> {
 
+	public static <Type> boolean areConnected(List<Type> sources, List<Type> destinations, Type srcData, Type dstData) {
+		if (sources.size() != destinations.size()) {
+			throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
+		}
 
-    public static <Type> boolean areConnected(List<Type> sources, List<Type> destinations, Type srcData, Type dstData) {
-        if (sources.size() != destinations.size()) {
-            throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
-        }
+		Graph<Type> graph = new Graph<Type>();
 
-        Graph<Type> graph = new Graph<Type>();
+		for (int i = 0; i < sources.size(); i++) {
+			graph.addEdge(sources.get(i), destinations.get(i));
+		}
 
-        for (int i = 0; i < sources.size(); i++) {
-            graph.addEdge(sources.get(i), destinations.get(i));
-        }
+		if (srcData == dstData) {
+			graph.getVertice(srcData.toString()).isVisited(true);
+			return true;
+		}
+		return recursiveConnected(graph, srcData, dstData);
+	}
 
+	public static <T> boolean recursiveConnected(Graph<T> graph, T currentData, T dstData) {
+		if (currentData == dstData) {
+			graph.getVertice(currentData.toString()).isVisited(true);
+			return true;
+		}
+		Iterator<Edge<T>> it = graph.getVertice(currentData.toString()).edges();
+		while (it.hasNext()) {
 
-        if (srcData == dstData) {
-        	graph.getVertice(srcData.toString()).isVisited(true);
-            return true;
-        }
-        return recursiveConnected(graph, srcData, dstData);
+			Edge<T> next = it.next();
+			if (next.getOtherVertex().getData().equals(dstData)) {
+				return true;
+			}
+			if (next.getOtherVertex().getVisited() == false) {
+				next.getOtherVertex().isVisited(true);
+				if (recursiveConnected(graph, next.getOtherVertex().getData(), dstData)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	// FILL IN + ADD METHOD COMMENT
+	//
+
+	public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData,
+			Type dstData) throws IllegalArgumentException {
+		if (sources.size() != destinations.size()) {
+			throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
+		}
+
+		Graph<Type> graph = new Graph<Type>();
+		
+		for (int i = 0; i < sources.size(); i++) {
+			graph.addEdge(sources.get(i), destinations.get(i));
+		}
+		Queue<Vertex<Type>> nodesToVisit = new LinkedList<Vertex<Type>>();
+		Iterator<Edge<Type>> it = graph.getVertice(srcData.toString()).edges();
+		while (it.hasNext()) {
+
+			Edge<Type> next = it.next();
+			nodesToVisit.add(next.getOtherVertex());
+			next.getOtherVertex().cameFrom(graph.getVertice(srcData.toString()));
+		}
+		while (!nodesToVisit.isEmpty()) {
+			Vertex<Type> n = nodesToVisit.remove();
+			n.isVisited(true);
+			if (n.getData() == dstData) {
+				return reconstructPath(graph,n,srcData,dstData);
+			}
+			
+			Iterator<Edge<Type>> it1 = graph.getVertice(n.getName().toString()).edges();
+			while (it1.hasNext()) {
+				Edge<Type> next = it1.next();
+				if (next.getOtherVertex().getVisited() == false) {
+					next.getOtherVertex().cameFrom(n);
+					nodesToVisit.add(next.getOtherVertex());
+					if (next.getOtherVertex().getData() == dstData) {
+						return reconstructPath(graph,next.getOtherVertex(),srcData,dstData);
+					}
+				}
+			}
+		}
+		throw new IllegalArgumentException();
+
+	}
+
+	public static <Type> List<Type> sort(List<Type> sources, List<Type> destinations) throws IllegalArgumentException {
+		if (sources.size() != destinations.size()) {
+			throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
+		}
+
+		Graph<Type> graph = new Graph<Type>();
+
+		for (int i = 0; i < sources.size(); i++) {
+			graph.addEdge(sources.get(i), destinations.get(i));
+		}
+
+		return null;
+	}
+	public static <Type>List<Type>reconstructPath(Graph<Type> g,Vertex<Type> node,Type srcData,Type dstData){
+        List<Vertex<Type>> path = new ArrayList<>();
+
+       for(Vertex<Type> vertex = g.getVertice(dstData.toString()); vertex.getData() != srcData; vertex = vertex.getCameFrom()){
+           path.add(vertex);
+       }
+       path.add(g.getVertice(srcData.toString()));
+       Collections.reverse(path);
+       return (List<Type>) path;
     }
 
-    public static <T> boolean recursiveConnected(Graph<T> graph, T currentData, T dstData) {
-    	 if (currentData == dstData) {
-         	graph.getVertice(currentData.toString()).isVisited(true);
-             return true;
-         }
-        Iterator<Edge<T>> it = graph.getVertice(currentData.toString()).edges();
-        while (it.hasNext()) {
+	/**
+	 * Builds "sources" and "destinations" lists according to the edges specified in
+	 * the given DOT file (e.g., "a -> b"). Assumes that the vertex data type is
+	 * String.
+	 * <p>
+	 * Accepts many valid "digraph" DOT files (see examples posted on Canvas).
+	 * --accepts \\-style comments --accepts one edge per line or edges terminated
+	 * with ; --does not accept attributes in [] (e.g., [label = "a label"])
+	 *
+	 * @param filename     - name of the DOT file
+	 * @param sources      - empty ArrayList, when method returns it is a valid
+	 *                     "sources" list that can be passed to the public methods
+	 *                     in this class
+	 * @param destinations - empty ArrayList, when method returns it is a valid
+	 *                     "destinations" list that can be passed to the public
+	 *                     methods in this class
+	 */
+	public static void buildListsFromDot(String filename, ArrayList<String> sources, ArrayList<String> destinations) {
 
-            Edge<T> next = it.next();
-            if (next.getOtherVertex().getData().equals(dstData)) {
-                return true;
-            }
-            if (next.getOtherVertex().getVisited() == false) {
-                next.getOtherVertex().isVisited(true);
-                return recursiveConnected(graph, next.getOtherVertex().getData(), dstData);
-            }
-        }
-        return false;
-    }
-    // FILL IN + ADD METHOD COMMENT
-    //
+		Scanner scan = null;
+		try {
+			scan = new Scanner(new File(filename));
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
 
+		scan.useDelimiter(";|\n");
 
+		// Determine if graph is directed (i.e., look for "digraph id {").
+		String line = "", edgeOp = "";
+		while (scan.hasNext()) {
+			line = scan.next();
 
+			// Skip //-style comments.
+			line = line.replaceFirst("//.*", "");
 
-    public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData, Type dstData)
-            throws IllegalArgumentException {
-        // FILL IN + ADD METHOD COMMENT
-        return null;
-    }
+			if (line.indexOf("digraph") >= 0) {
+				edgeOp = "->";
+				line = line.replaceFirst(".*\\{", "");
+				break;
+			}
+		}
+		if (edgeOp.equals("")) {
+			System.out.println("DOT graph must be directed (i.e., digraph).");
+			scan.close();
+			System.exit(0);
 
-    public static <Type> List<Type> sort(List<Type> sources, List<Type> destinations) throws IllegalArgumentException {
-        // FILL IN + ADD METHOD COMMENT
+		}
 
-        return null;
-    }
+		// Look for edge operator -> and determine the source and destination
+		// vertices for each edge.
+		while (scan.hasNext()) {
+			String[] substring = line.split(edgeOp);
 
-    /**
-     * Builds "sources" and "destinations" lists according to the edges
-     * specified in the given DOT file (e.g., "a -> b"). Assumes that the vertex
-     * data type is String.
-     * <p>
-     * Accepts many valid "digraph" DOT files (see examples posted on Canvas).
-     * --accepts \\-style comments
-     * --accepts one edge per line or edges terminated with ;
-     * --does not accept attributes in [] (e.g., [label = "a label"])
-     *
-     * @param filename     - name of the DOT file
-     * @param sources      - empty ArrayList, when method returns it is a valid
-     *                     "sources" list that can be passed to the public methods in this
-     *                     class
-     * @param destinations - empty ArrayList, when method returns it is a valid
-     *                     "destinations" list that can be passed to the public methods in
-     *                     this class
-     */
-    public static void buildListsFromDot(String filename, ArrayList<String> sources, ArrayList<String> destinations) {
+			for (int i = 0; i < substring.length - 1; i += 2) {
+				// remove " and trim whitespace from node string on the left
+				String vertex1 = substring[0].replace("\"", "").trim();
+				// if string is empty, try again
+				if (vertex1.equals(""))
+					continue;
 
-        Scanner scan = null;
-        try {
-            scan = new Scanner(new File(filename));
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-            System.exit(0);
-        }
+				// do the same for the node string on the right
+				String vertex2 = substring[1].replace("\"", "").trim();
+				if (vertex2.equals(""))
+					continue;
 
-        scan.useDelimiter(";|\n");
+				// indicate edge between vertex1 and vertex2
+				sources.add(vertex1);
+				destinations.add(vertex2);
+			}
 
-        // Determine if graph is directed (i.e., look for "digraph id {").
-        String line = "", edgeOp = "";
-        while (scan.hasNext()) {
-            line = scan.next();
+			// do until the "}" has been read
+			if (substring[substring.length - 1].indexOf("}") >= 0)
+				break;
 
-            // Skip //-style comments.
-            line = line.replaceFirst("//.*", "");
+			line = scan.next();
 
-            if (line.indexOf("digraph") >= 0) {
-                edgeOp = "->";
-                line = line.replaceFirst(".*\\{", "");
-                break;
-            }
-        }
-        if (edgeOp.equals("")) {
-            System.out.println("DOT graph must be directed (i.e., digraph).");
-            scan.close();
-            System.exit(0);
+			// Skip //-style comments.
+			line = line.replaceFirst("//.*", "");
+		}
 
-        }
-
-        // Look for edge operator -> and determine the source and destination
-        // vertices for each edge.
-        while (scan.hasNext()) {
-            String[] substring = line.split(edgeOp);
-
-            for (int i = 0; i < substring.length - 1; i += 2) {
-                // remove " and trim whitespace from node string on the left
-                String vertex1 = substring[0].replace("\"", "").trim();
-                // if string is empty, try again
-                if (vertex1.equals(""))
-                    continue;
-
-                // do the same for the node string on the right
-                String vertex2 = substring[1].replace("\"", "").trim();
-                if (vertex2.equals(""))
-                    continue;
-
-                // indicate edge between vertex1 and vertex2
-                sources.add(vertex1);
-                destinations.add(vertex2);
-            }
-
-            // do until the "}" has been read
-            if (substring[substring.length - 1].indexOf("}") >= 0)
-                break;
-
-            line = scan.next();
-
-            // Skip //-style comments.
-            line = line.replaceFirst("//.*", "");
-        }
-
-        scan.close();
-    }
+		scan.close();
+	}
 }

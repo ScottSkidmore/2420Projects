@@ -10,11 +10,12 @@ import java.util.Iterator;
  * @author Erin Parker
  * @version March 3, 2022
  */
-public class Vertex <T>{
+public class Vertex<T> {
 
 	// used to id the Vertex
 	private T name;
 	private boolean visited = false;
+	private Vertex<T> cameFrom;
 
 	// adjacency list
 	private LinkedList<Edge<T>> adj;
@@ -27,6 +28,15 @@ public class Vertex <T>{
 	public Vertex(T name) {
 		this.name = name;
 		this.adj = new LinkedList<Edge<T>>();
+		this.cameFrom = null;
+	}
+
+	public void cameFrom(Vertex<T> n) {
+		this.cameFrom = n;
+	}
+
+	public Vertex<T> getCameFrom() {
+		return this.cameFrom;
 	}
 
 	/**
@@ -46,7 +56,8 @@ public class Vertex <T>{
 	}
 
 	/**
-	 * @return a iterator for accessing the edges for which this Vertex is the source
+	 * @return a iterator for accessing the edges for which this Vertex is the
+	 *         source
 	 */
 	public Iterator<Edge<T>> edges() {
 		return adj.iterator();
@@ -58,19 +69,20 @@ public class Vertex <T>{
 	public String toString() {
 		String s = "Vertex " + name + " adjacent to vertices ";
 		Iterator<Edge<T>> itr = adj.iterator();
-		while(itr.hasNext())
+		while (itr.hasNext())
 			s += itr.next() + "  ";
 		return s;
 	}
 
-
-	public void isVisited(boolean T){
+	public void isVisited(boolean T) {
 		this.visited = T;
 	}
-	public boolean getVisited(){
+
+	public boolean getVisited() {
 		return visited;
 	}
-	public T getData(){
+
+	public T getData() {
 		return name;
 	}
 
