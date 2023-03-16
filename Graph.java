@@ -13,13 +13,13 @@ import java.util.Iterator;
 public class Graph <T>{
 
 	// the graph -- a set of vertices (String name mapped to Vertex instance)
-	private HashMap<String, Vertex> vertices;
+	private HashMap<T, Vertex> vertices;
 
 	/**
 	 * Constructs an empty graph.
 	 */
 	public Graph() {
-		vertices = (HashMap<String, Vertex>) new HashMap<T, Vertex>();
+		vertices = (HashMap<T, Vertex>) new HashMap<T, Vertex>();
 	}
 
 	public Vertex getVertice(String key){
@@ -41,7 +41,7 @@ public class Graph <T>{
 		// else, create a new object and add to graph
 		else {
 			vertex1 = new Vertex(name1);
-			vertices.put(vertex1.getName(), vertex1);
+			vertices.put((T) vertex1.getName(), vertex1);
 		}
 
 		Vertex vertex2;
@@ -49,7 +49,7 @@ public class Graph <T>{
 			vertex2 = vertices.get(name2);
 		else {
 			vertex2 = new Vertex(name2);
-			vertices.put(vertex2.getName(), vertex2);
+			vertices.put((T) vertex2.getName(), vertex2);
 		}
 
 		// add new directed edge from vertex1 to vertex2
@@ -86,4 +86,9 @@ public class Graph <T>{
 		
 		return result.toString();
 	}
+
+	public HashMap getMap(){
+		return vertices;
+	}
+
 }
