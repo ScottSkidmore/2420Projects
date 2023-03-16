@@ -70,8 +70,11 @@ public class Vertex <T>{
 	public boolean getVisited(){
 		return visited;
 	}
-	public T getData(){
-		return name;
+	public T getData(){return name;}
+
+	public boolean isEmpty(Vertex v){
+		if (v.adj == null) return true;
+		else return false;
 	}
 
 }

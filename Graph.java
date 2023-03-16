@@ -22,7 +22,7 @@ public class Graph <T>{
 		vertices = (HashMap<T, Vertex>) new HashMap<T, Vertex>();
 	}
 
-	public Vertex getVertice(String key){
+	public Vertex getVertice(T key){
 		return vertices.get(key);
 	}
 	/**
@@ -41,7 +41,7 @@ public class Graph <T>{
 		// else, create a new object and add to graph
 		else {
 			vertex1 = new Vertex(name1);
-			vertices.put((T) vertex1.getName(), vertex1);
+			vertices.put((T) name1, vertex1);
 		}
 
 		Vertex vertex2;
@@ -49,7 +49,7 @@ public class Graph <T>{
 			vertex2 = vertices.get(name2);
 		else {
 			vertex2 = new Vertex(name2);
-			vertices.put((T) vertex2.getName(), vertex2);
+			vertices.put((T) name2, vertex2);
 		}
 
 		// add new directed edge from vertex1 to vertex2

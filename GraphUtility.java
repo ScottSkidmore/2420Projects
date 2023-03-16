@@ -35,7 +35,7 @@ public class GraphUtility<Type> {
         return recursiveConnected(graph, srcData, dstData);
     }
 
-    public static <T> boolean recursiveConnected(Graph<T> graph, T currentData, T dstData) {
+    public static <Type> boolean recursiveConnected(Graph<Type> graph, Type currentData, Type dstData) {
         if (currentData == dstData) {
             graph.getVertice(currentData).isVisited(true);
             return true;
@@ -48,7 +48,7 @@ public class GraphUtility<Type> {
 
             if (next.getOtherVertex().getVisited() == false) {
                 next.getOtherVertex().isVisited(true);
-                if(recursiveConnected(graph, (T) next.getOtherVertex().getData(), dstData))
+                if(recursiveConnected(graph, (Type) next.getOtherVertex().getData(), dstData))
                     return true;
             }
         }
@@ -73,18 +73,36 @@ public class GraphUtility<Type> {
     }
 
 
-    public static <Type>List<Type>reconstructPath(Type srcData,Type dstData){
-        List<Vertex> path = new ArrayList<>();
-
-       for(Vertex = dstData; node != srcData; node = node.getCameFrom()){
-           path.add(node);
-       }
-       path.add(srcData);
-        return reverse(path);
-    }
 
     public static <Type> List<Type> sort(List<Type> sources, List<Type> destinations) throws IllegalArgumentException {
         // FILL IN + ADD METHOD COMMENT
+        List<Vertex> path = new ArrayList<>();
+
+        Graph<Type> graph = new Graph<Type>();
+
+        Vertex <Type>startVertex = null;
+
+        for (int i = 0; i < sources.size(); i++) {
+            graph.addEdge(sources.get(i), destinations.get(i));
+        }
+
+        for (int v = 0; v < sources.size(); v++){
+            if(!graph.getVertice(sources.get(v)).edges().hasNext()){
+                startVertex = graph.getVertice(sources.get(v));
+                Iterator it = startVertex.edges();
+                path.add(startVertex);
+                sources.remove(startVertex);
+            }
+
+            Iterator it = startVertex.edges();
+            Edge graphIterator = (Edge) it.next();
+            graphIterator = edge.getOtherVertex();
+        }
+
+
+
+
+
 
         return null;
     }
