@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+import static jdk.nashorn.internal.ir.RuntimeNode.Request.reverse;
+
 /**
  * Contains several methods for solving problems on generic, directed, unweighted, sparse graphs.
  *
@@ -23,8 +25,9 @@ public class GraphUtility<Type> {
         for (int i = 0; i < sources.size(); i++) {
             graph.addEdge(sources.get(i), destinations.get(i));
         }
+        System.out.println(graph);
 
-        graph.getVertice(srcData.toString()).isVisited(true);
+        graph.getVertice(srcData).isVisited(true);
 
         if (srcData == dstData) {
             return true;
@@ -32,17 +35,21 @@ public class GraphUtility<Type> {
         return recursiveConnected(graph, srcData, dstData);
     }
 
-    public static <Type> boolean recursiveConnected(Graph graph, Object currentData, Object dstData) {
-        Iterator it = graph.getVertice(currentData.toString()).edges();
+    public static <T> boolean recursiveConnected(Graph<T> graph, T currentData, T dstData) {
+        if (currentData == dstData) {
+            graph.getVertice(currentData).isVisited(true);
+            return true;
+        }
+        Iterator it = graph.getVertice(currentData).edges();
         while (it.hasNext()) {
 
             Edge next = (Edge) it.next();
-            if (next.getOtherVertex().getName().equals(dstData.toString())) {
-                return true;
-            }
+            if (next.getOtherVertex().getData().equals(dstData)) return true;
+
             if (next.getOtherVertex().getVisited() == false) {
                 next.getOtherVertex().isVisited(true);
-                recursiveConnected(graph, next.getOtherVertex().getData(), dstData);
+                if(recursiveConnected(graph, (T) next.getOtherVertex().getData(), dstData))
+                    return true;
             }
         }
         return false;
@@ -51,12 +58,29 @@ public class GraphUtility<Type> {
     //
 
 
-
-
     public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData, Type dstData)
             throws IllegalArgumentException {
+        //make queue
+        //mark src data as visited
+        //put first node in queue
+
+        //while queue isn't empty{
+        //pop the queue and loop through the edges in the vertex you popped marking the vertexes at the other end as visited
+        //
+    //  }
         // FILL IN + ADD METHOD COMMENT
         return null;
+    }
+
+
+    public static <Type>List<Type>reconstructPath(Type srcData,Type dstData){
+        List<Vertex> path = new ArrayList<>();
+
+       for(Vertex = dstData; node != srcData; node = node.getCameFrom()){
+           path.add(node);
+       }
+       path.add(srcData);
+        return reverse(path);
     }
 
     public static <Type> List<Type> sort(List<Type> sources, List<Type> destinations) throws IllegalArgumentException {
