@@ -4,20 +4,25 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-import static jdk.nashorn.internal.ir.RuntimeNode.Request.reverse;
-
 /**
- * Contains several methods for solving problems on generic, directed, unweighted, sparse graphs.
+ * Contains several methods for solving problems on generic, directed,
+ * unweighted, sparse graphs.
  *
  * @author Erin Parker & ??
  * @version March 3, 2022
  */
 public class GraphUtility<Type> {
 
-
     public static <Type> boolean areConnected(List<Type> sources, List<Type> destinations, Type srcData, Type dstData) {
         if (sources.size() != destinations.size()) {
             throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
+        }
+
+        if (sources.contains(srcData)== false||destinations.contains(dstData) == false || srcData == null || dstData == null) {
+            if (sources.contains(dstData)&&destinations.contains(srcData)) {
+                return false;
+            }
+            throw new IllegalArgumentException("Either srcData or dstData is not present in the sources or destinations lists, or they are null.");
         }
 
         Graph<Type> graph = new Graph<Type>();
@@ -25,31 +30,34 @@ public class GraphUtility<Type> {
         for (int i = 0; i < sources.size(); i++) {
             graph.addEdge(sources.get(i), destinations.get(i));
         }
-        System.out.println(graph);
-
-        graph.getVertice(srcData).isVisited(true);
 
         if (srcData == dstData) {
+            graph.getVertice(srcData.toString()).isVisited(true);
             return true;
+        }
+        if (sources.contains(srcData)== false||destinations.contains(dstData) == false || srcData == null || dstData == null) {
+            throw new IllegalArgumentException("Either srcData or dstData is not present in the sources or destinations lists, or they are null.");
         }
         return recursiveConnected(graph, srcData, dstData);
     }
 
-    public static <Type> boolean recursiveConnected(Graph<Type> graph, Type currentData, Type dstData) {
+    public static <T> boolean recursiveConnected(Graph<T> graph, T currentData, T dstData) {
         if (currentData == dstData) {
-            graph.getVertice(currentData).isVisited(true);
+            graph.getVertice(currentData.toString()).isVisited(true);
             return true;
         }
-        Iterator it = graph.getVertice(currentData).edges();
+        Iterator<Edge<T>> it = graph.getVertice(currentData.toString()).edges();
         while (it.hasNext()) {
 
-            Edge next = (Edge) it.next();
-            if (next.getOtherVertex().getData().equals(dstData)) return true;
-
+            Edge<T> next = it.next();
+            if (next.getOtherVertex().getData().equals(dstData)) {
+                return true;
+            }
             if (next.getOtherVertex().getVisited() == false) {
                 next.getOtherVertex().isVisited(true);
-                if(recursiveConnected(graph, (Type) next.getOtherVertex().getData(), dstData))
+                if (recursiveConnected(graph, next.getOtherVertex().getData(), dstData)) {
                     return true;
+                }
             }
         }
         return false;
@@ -57,73 +65,122 @@ public class GraphUtility<Type> {
     // FILL IN + ADD METHOD COMMENT
     //
 
+    public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData,
+                                                 Type dstData) throws IllegalArgumentException {
+        if (sources.size() != destinations.size()) {
+            throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
+        }
+        if (sources.contains(srcData)== false||destinations.contains(dstData) == false || srcData == null || dstData == null) {
 
-    public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData, Type dstData)
-            throws IllegalArgumentException {
-        //make queue
-        //mark src data as visited
-        //put first node in queue
-
-        //while queue isn't empty{
-        //pop the queue and loop through the edges in the vertex you popped marking the vertexes at the other end as visited
-        //
-    //  }
-        // FILL IN + ADD METHOD COMMENT
-        return null;
-    }
-
-
-
-    public static <Type> List<Type> sort(List<Type> sources, List<Type> destinations) throws IllegalArgumentException {
-        // FILL IN + ADD METHOD COMMENT
-        List<Vertex> path = new ArrayList<>();
+            throw new IllegalArgumentException("Either srcData or dstData is not present in the sources or destinations lists, or they are null.");
+        }
 
         Graph<Type> graph = new Graph<Type>();
-
-        Vertex <Type>startVertex = null;
 
         for (int i = 0; i < sources.size(); i++) {
             graph.addEdge(sources.get(i), destinations.get(i));
         }
+        Queue<Vertex<Type>> nodesToVisit = new LinkedList<Vertex<Type>>();
+        Iterator<Edge<Type>> it = graph.getVertice(srcData.toString()).edges();
+        while (it.hasNext()) {
 
-        for (int v = 0; v < sources.size(); v++){
-            if(!graph.getVertice(sources.get(v)).edges().hasNext()){
-                startVertex = graph.getVertice(sources.get(v));
-                Iterator it = startVertex.edges();
-                path.add(startVertex);
-                sources.remove(startVertex);
+            Edge<Type> next = it.next();
+            nodesToVisit.add(next.getOtherVertex());
+            next.getOtherVertex().cameFrom(graph.getVertice(srcData.toString()));
+        }
+        while (!nodesToVisit.isEmpty()) {
+            Vertex<Type> n = nodesToVisit.remove();
+            n.isVisited(true);
+            if (n.getData() == dstData) {
+                return reconstructPath(graph,n,srcData,dstData);
             }
 
-            Iterator it = startVertex.edges();
-            Edge graphIterator = (Edge) it.next();
-            graphIterator = edge.getOtherVertex();
+            Iterator<Edge<Type>> it1 = graph.getVertice(n.getName().toString()).edges();
+            while (it1.hasNext()) {
+                Edge<Type> next = it1.next();
+                if (next.getOtherVertex().getVisited() == false) {
+                    if(next.getOtherVertex().getCameFrom()==(null)) {
+                        next.getOtherVertex().cameFrom(n);
+                    }
+                    nodesToVisit.add(next.getOtherVertex());
+                    if (next.getOtherVertex().getData() == dstData) {
+                        return reconstructPath(graph,next.getOtherVertex(),srcData,dstData);
+                    }
+                }
+            }
+        }
+        throw new IllegalArgumentException();
+
+    }
+
+    public static <Type> List<Type> sort(List<Type> sources, List<Type> destinations) throws IllegalArgumentException {
+        if (sources.size() != destinations.size()) {
+            throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
         }
 
+        Graph<Type> graph = new Graph<Type>();
 
+        // Add vertices and edges to the graph
+        for (int i = 0; i < sources.size(); i++) {
+            graph.addEdge(sources.get(i), destinations.get(i));
+        }
 
+        // Perform topological sort
+        ArrayList<Vertex<Type>> nodesWithNoIncomingEdges = new ArrayList<>();
+        for (Vertex<Type> v : graph.getMap().values()) {
+            if (v.edgeSize() == 0) {
+                nodesWithNoIncomingEdges.add(v);
+            }
+        }
 
+        List<Type> result = new ArrayList<>();
+        while (!nodesWithNoIncomingEdges.isEmpty()) {
+            Vertex<Type> node = nodesWithNoIncomingEdges.iterator().next();
+            nodesWithNoIncomingEdges.remove(node);
+            result.add(node.getData());
+            for (Edge<Type> e : node.getEdges()) {
+                Vertex<Type> dest = e.getOtherVertex();
+                dest.removeEdge(e);
+                if (dest.edgeSize() == 0) {
+                    nodesWithNoIncomingEdges.add(dest);
+                }
+            }
+        }
 
+        if (result.size() != graph.getVertNum()) {
+            throw new IllegalArgumentException("The graph contains a cycle.");
+        }
 
-        return null;
+        return result;
+    }
+
+    public static <Type>List<Type>reconstructPath(Graph<Type> g,Vertex<Type> node,Type srcData,Type dstData){
+        List<Type> path = new ArrayList<>();
+
+        for(Vertex<Type>vertex = g.getVertice(dstData.toString()); vertex.getData() != srcData; vertex = vertex.getCameFrom()){
+            path.add(vertex.getData());
+        }
+        path.add(g.getVertice(srcData.toString()).getData());
+        Collections.reverse(path);
+        return path;
     }
 
     /**
-     * Builds "sources" and "destinations" lists according to the edges
-     * specified in the given DOT file (e.g., "a -> b"). Assumes that the vertex
-     * data type is String.
+     * Builds "sources" and "destinations" lists according to the edges specified in
+     * the given DOT file (e.g., "a -> b"). Assumes that the vertex data type is
+     * String.
      * <p>
      * Accepts many valid "digraph" DOT files (see examples posted on Canvas).
-     * --accepts \\-style comments
-     * --accepts one edge per line or edges terminated with ;
-     * --does not accept attributes in [] (e.g., [label = "a label"])
+     * --accepts \\-style comments --accepts one edge per line or edges terminated
+     * with ; --does not accept attributes in [] (e.g., [label = "a label"])
      *
      * @param filename     - name of the DOT file
      * @param sources      - empty ArrayList, when method returns it is a valid
-     *                     "sources" list that can be passed to the public methods in this
-     *                     class
+     *                     "sources" list that can be passed to the public methods
+     *                     in this class
      * @param destinations - empty ArrayList, when method returns it is a valid
-     *                     "destinations" list that can be passed to the public methods in
-     *                     this class
+     *                     "destinations" list that can be passed to the public
+     *                     methods in this class
      */
     public static void buildListsFromDot(String filename, ArrayList<String> sources, ArrayList<String> destinations) {
 
