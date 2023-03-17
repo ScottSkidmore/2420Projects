@@ -145,21 +145,18 @@ public class GraphUtility<Type> {
             result.add(node.getData());
             for (Edge<Type> e : node.getEdges()) {
                 Vertex<Type> dest = e.getOtherVertex();
-                dest.removeEdge(e);
+                node.removeEdge(e);
                 e.getOtherVertex().changeInCount(-1);
-                if (dest.edgeSize() == 0) {
+                if (dest.getInCount() == 0) {
                     vertexesWithNoIncomingEdges.add(dest);
                 }
             }
         }
-
+        System.out.println(result);
         if (result.size() != vertNum) {
-            System.out.println((result));
-            System.out.println(result.size());
-            System.out.println(vertNum);
             throw new IllegalArgumentException("The graph contains a cycle.");
         }
-
+        System.out.println(result);
         return result;
     }
 
