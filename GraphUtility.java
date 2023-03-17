@@ -118,36 +118,45 @@ public class GraphUtility<Type> {
             throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
         }
 
+        int vertNum = 0;
         Graph<Type> graph = new Graph<Type>();
 
         // Add vertices and edges to the graph
         for (int i = 0; i < sources.size(); i++) {
             graph.addEdge(sources.get(i), destinations.get(i));
+            graph.getVertice(destinations.get(i).toString()).changeInCount(1);
         }
 
+        System.out.println(graph);
         // Perform topological sort
-        ArrayList<Vertex<Type>> nodesWithNoIncomingEdges = new ArrayList<>();
+        ArrayList<Vertex<Type>> vertexesWithNoIncomingEdges = new ArrayList<>();
         for (Vertex<Type> v : graph.getMap().values()) {
-            if (v.edgeSize() == 0) {
-                nodesWithNoIncomingEdges.add(v);
+            vertNum = vertNum+1;
+            System.out.println(v.getInCount());
+            if(v.getInCount() == 0) {
+                vertexesWithNoIncomingEdges.add(v);
             }
         }
 
         List<Type> result = new ArrayList<>();
-        while (!nodesWithNoIncomingEdges.isEmpty()) {
-            Vertex<Type> node = nodesWithNoIncomingEdges.iterator().next();
-            nodesWithNoIncomingEdges.remove(node);
+        while (!vertexesWithNoIncomingEdges.isEmpty()) {
+            Vertex<Type> node = vertexesWithNoIncomingEdges.iterator().next();
+            vertexesWithNoIncomingEdges.remove(node);
             result.add(node.getData());
             for (Edge<Type> e : node.getEdges()) {
                 Vertex<Type> dest = e.getOtherVertex();
                 dest.removeEdge(e);
+                e.getOtherVertex().changeInCount(-1);
                 if (dest.edgeSize() == 0) {
-                    nodesWithNoIncomingEdges.add(dest);
+                    vertexesWithNoIncomingEdges.add(dest);
                 }
             }
         }
 
-        if (result.size() != graph.getVertNum()) {
+        if (result.size() != vertNum) {
+            System.out.println((result));
+            System.out.println(result.size());
+            System.out.println(vertNum);
             throw new IllegalArgumentException("The graph contains a cycle.");
         }
 
