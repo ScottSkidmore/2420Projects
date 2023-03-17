@@ -18,8 +18,8 @@ public class GraphUtility<Type> {
             throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
         }
 
-        if (sources.contains(srcData)== false||destinations.contains(dstData) == false || srcData == null || dstData == null) {
-            if (sources.contains(dstData)&&destinations.contains(srcData)) {
+        if (sources.contains(srcData) == false || destinations.contains(dstData) == false || srcData == null || dstData == null) {
+            if (sources.contains(dstData) && destinations.contains(srcData)) {
                 return false;
             }
             throw new IllegalArgumentException("Either srcData or dstData is not present in the sources or destinations lists, or they are null.");
@@ -35,7 +35,7 @@ public class GraphUtility<Type> {
             graph.getVertice(srcData.toString()).isVisited(true);
             return true;
         }
-        if (sources.contains(srcData)== false||destinations.contains(dstData) == false || srcData == null || dstData == null) {
+        if (sources.contains(srcData) == false || destinations.contains(dstData) == false || srcData == null || dstData == null) {
             throw new IllegalArgumentException("Either srcData or dstData is not present in the sources or destinations lists, or they are null.");
         }
         return recursiveConnected(graph, srcData, dstData);
@@ -70,7 +70,7 @@ public class GraphUtility<Type> {
         if (sources.size() != destinations.size()) {
             throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
         }
-        if (sources.contains(srcData)== false||destinations.contains(dstData) == false || srcData == null || dstData == null) {
+        if (sources.contains(srcData) == false || destinations.contains(dstData) == false || srcData == null || dstData == null) {
 
             throw new IllegalArgumentException("Either srcData or dstData is not present in the sources or destinations lists, or they are null.");
         }
@@ -92,19 +92,19 @@ public class GraphUtility<Type> {
             Vertex<Type> n = nodesToVisit.remove();
             n.isVisited(true);
             if (n.getData() == dstData) {
-                return reconstructPath(graph,n,srcData,dstData);
+                return reconstructPath(graph, n, srcData, dstData);
             }
 
             Iterator<Edge<Type>> it1 = graph.getVertice(n.getName().toString()).edges();
             while (it1.hasNext()) {
                 Edge<Type> next = it1.next();
                 if (next.getOtherVertex().getVisited() == false) {
-                    if(next.getOtherVertex().getCameFrom()==(null)) {
+                    if (next.getOtherVertex().getCameFrom() == (null)) {
                         next.getOtherVertex().cameFrom(n);
                     }
                     nodesToVisit.add(next.getOtherVertex());
                     if (next.getOtherVertex().getData() == dstData) {
-                        return reconstructPath(graph,next.getOtherVertex(),srcData,dstData);
+                        return reconstructPath(graph, next.getOtherVertex(), srcData, dstData);
                     }
                 }
             }
@@ -127,43 +127,36 @@ public class GraphUtility<Type> {
             graph.getVertice(destinations.get(i).toString()).changeInCount(1);
         }
 
-        System.out.println(graph);
-        // Perform topological sort
-        ArrayList<Vertex<Type>> vertexesWithNoIncomingEdges = new ArrayList<>();
+        ArrayList<Vertex<Type>> path = new ArrayList<>();
         for (Vertex<Type> v : graph.getMap().values()) {
-            vertNum = vertNum+1;
-            System.out.println(v.getInCount());
-            if(v.getInCount() == 0) {
-                vertexesWithNoIncomingEdges.add(v);
+            vertNum = vertNum + 1;
+            if (v.getInCount() == 0) {
+                path.add(v);
             }
         }
 
         List<Type> result = new ArrayList<>();
-        while (!vertexesWithNoIncomingEdges.isEmpty()) {
-            Vertex<Type> node = vertexesWithNoIncomingEdges.iterator().next();
-            vertexesWithNoIncomingEdges.remove(node);
-            result.add(node.getData());
-            for (Edge<Type> e : node.getEdges()) {
+        for (int i = 0; i < path.size(); i++) {
+            Vertex<Type> vertex = path.get(i);
+            result.add(vertex.getData());
+            for (Edge<Type> e : vertex.getEdges()) {
                 Vertex<Type> dest = e.getOtherVertex();
-                node.removeEdge(e);
+                vertex.removeEdge(e);
                 e.getOtherVertex().changeInCount(-1);
                 if (dest.getInCount() == 0) {
-                    vertexesWithNoIncomingEdges.add(dest);
+                    path.add(dest);
                 }
             }
         }
-        System.out.println(result);
-        if (result.size() != vertNum) {
-            throw new IllegalArgumentException("The graph contains a cycle.");
-        }
-        System.out.println(result);
+        if (result.size() != vertNum) throw new IllegalArgumentException("Graph is cyclical.");
+
         return result;
     }
 
-    public static <Type>List<Type>reconstructPath(Graph<Type> g,Vertex<Type> node,Type srcData,Type dstData){
+    public static <Type> List<Type> reconstructPath(Graph<Type> g, Vertex<Type> node, Type srcData, Type dstData) {
         List<Type> path = new ArrayList<>();
 
-        for(Vertex<Type>vertex = g.getVertice(dstData.toString()); vertex.getData() != srcData; vertex = vertex.getCameFrom()){
+        for (Vertex<Type> vertex = g.getVertice(dstData.toString()); vertex.getData() != srcData; vertex = vertex.getCameFrom()) {
             path.add(vertex.getData());
         }
         path.add(g.getVertice(srcData.toString()).getData());
