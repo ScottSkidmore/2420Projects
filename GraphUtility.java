@@ -17,6 +17,9 @@ public class GraphUtility<Type> {
 		if (sources.size() != destinations.size()) {
 			throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
 		}
+		if (!sources.contains(srcData)||!destinations.contains(dstData)) {
+			throw new IllegalArgumentException("Sources or destinations not found in data");
+		}
 
 		Graph<Type> graph = new Graph<Type>();
 
@@ -57,10 +60,13 @@ public class GraphUtility<Type> {
 
 	public static <Type> List<Type> shortestPath(List<Type> sources, List<Type> destinations, Type srcData,
 			Type dstData) throws IllegalArgumentException {
+		
 		if (sources.size() != destinations.size()) {
 			throw new IllegalArgumentException("Sources and destinations lengths are not equal.");
 		}
-
+		if (!sources.contains(srcData)||!destinations.contains(dstData)) {
+			throw new IllegalArgumentException("Sources or destinations not found in data");
+		}
 		Graph<Type> graph = new Graph<Type>();
 		
 		for (int i = 0; i < sources.size(); i++) {
