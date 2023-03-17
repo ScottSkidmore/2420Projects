@@ -17,6 +17,8 @@ public class Vertex<T> {
 	private boolean visited = false;
 	private Vertex<T> cameFrom;
 
+	private int inCount = 0;
+
 	// adjacency list
 	private LinkedList<Edge<T>> adj;
 
@@ -29,6 +31,7 @@ public class Vertex<T> {
 		this.name = name;
 		this.adj = new LinkedList<Edge<T>>();
 		this.cameFrom = null;
+
 	}
 
 	public void cameFrom(Vertex<T> n) {
@@ -101,4 +104,10 @@ public class Vertex<T> {
 		return adj.size();
 	}
 
+	public void changeInCount(int i){
+		this.inCount = this.inCount+i;
+	}
+	public int getInCount(){
+		return this.inCount;
+	}
 }
