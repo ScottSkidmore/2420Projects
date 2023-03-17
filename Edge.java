@@ -3,32 +3,32 @@ package assign07;
 /**
  * This class represents an edge between a source vertex and a destination
  * vertex in a directed graph.
- * 
+ *
  * The source of this edge is the Vertex whose object has an adjacency list
  * containing this edge.
- * 
+ *
  * @author Erin Parker
  * @version March 3, 2022
  */
-public class Edge {
+public class Edge<T> {
 
 	// destination of this directed edge
-	private Vertex dst;
+	private Vertex<T> dst;
 
 	/**
 	 * Creates an Edge object, given the Vertex that is the destination.
 	 * (The Vertex that stores this Edge object is the source.)
-	 * 
+	 *
 	 * @param dst - the destination Vertex
 	 */
-	public Edge(Vertex dst) {
+	public Edge(Vertex<T> dst) {
 		this.dst = dst;
 	}
 
 	/**
 	 * @return the destination Vertex of this Edge
 	 */
-	public Vertex getOtherVertex() {
+	public Vertex<T> getOtherVertex() {
 		return this.dst;
 	}
 
