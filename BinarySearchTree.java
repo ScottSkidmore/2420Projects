@@ -318,30 +318,34 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
         if(item.equals(startNode.getData())) throw new IndexOutOfBoundsException("The data is at the first Node");
 
         while (currentNode.getLeft() != null|| currentNode.getRight() != null) {
-            if (currentNode.getLeft() != null) {
+            if (currentNode.getLeft() != null && temp.getData().compareTo(currentNode.getData()) < 0) {
                 if(temp.getData().compareTo(currentNode.getLeft().getData()) == 0){
                     return currentNode;
                 }
-                if (currentNode.getLeft().equals(null)) {
-                    return null;
-                } else {
+                if(temp.getData().compareTo(currentNode.getLeft().getData()) < 0){
                     currentNode = currentNode.getLeft();
+                }
+                if (currentNode.getLeft().equals(null)) {
+                    System.out.println("Item not in list");
                 }
 
             }
-            if(currentNode.getRight() != null) {
+            if(currentNode.getRight() != null && temp.getData().compareTo(currentNode.getData()) > 0) {
+                if(temp.getData().compareTo(currentNode.getRight().getData()) > 0) {
+                    currentNode = currentNode.getRight();
+                }
                 if(temp.getData().compareTo(currentNode.getRight().getData()) == 0){
                     return currentNode;
                 }
                 if (currentNode.getRight().equals(null)) {
                     return null;
-                } else {
-                    currentNode = currentNode.getRight();
                 }
             }
+            return currentNode;
         }
-        return null;
+        return currentNode;
     }
+
     private Node getLeftMostNode(Node node){
         if(node.getLeft() == null) {
             return node;
