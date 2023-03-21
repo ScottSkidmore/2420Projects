@@ -14,6 +14,8 @@ public class BinarySearchTreeTest {
             list.add(i);
         }
         balls.addAll(list);
+        balls.remove(3);
+
     }
 
 

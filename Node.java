@@ -9,9 +9,9 @@ package assign08;
  * @Version March 20, 2023
  */
 public class Node<T extends Comparable<? super T>> {
-    private Node left;
-    private Node right;
-    private T data;
+    private Node left = null;
+    private Node right = null;
+    private T data = null;
 
     /**
      * Constructs a node with the data param.

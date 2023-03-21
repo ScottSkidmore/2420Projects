@@ -205,12 +205,24 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public boolean remove(Type item) {
+        if(startNode.getData().equals(item)){
+            getLeftMostNode(startNode.getRight()).setLeft(startNode.getLeft());
+            startNode = startNode.getRight();
+            return true;
+        }
         Node parent = getBefore(item);
+        System.out.print(parent.getData());
 
         if(parent.getRight().getData().equals(item)){
-            if (parent.getRight().getRight().equals(null)) parent.setRight(parent.getRight().getLeft());
+            if (parent.getRight().getRight() == null) {
+                parent.setRight(parent.getRight().getLeft());
+                return true;
+            }
 
-            if(parent.getRight().getLeft().equals(null)) parent.setRight(parent.getRight().getRight());
+            if(parent.getRight().getLeft() == null) {
+                parent.setRight(parent.getRight().getRight());
+                return true;
+            }
 
             getLeftMostNode(parent.getRight().getRight()).setLeft(parent.getRight().getLeft());
             parent.setRight(parent.getRight().getRight());
@@ -218,9 +230,15 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
         }
 
         if(parent.getLeft().getData().equals(item)){
-            if (parent.getLeft().getRight().equals(null)) parent.setLeft(parent.getRight().getLeft());
+            if (parent.getLeft().getRight() == null) {
+                parent.setLeft(parent.getRight().getLeft());
+                return true;
+            }
 
-            if(parent.getLeft().getLeft().equals(null)) parent.setLeft(parent.getLeft().getRight());
+            if(parent.getLeft().getLeft() == null) {
+                parent.setLeft(parent.getLeft().getRight());
+                return true;
+            }
 
             getLeftMostNode(parent.getLeft().getRight()).setLeft(parent.getRight().getLeft());
             parent.setRight(parent.getLeft().getRight());
@@ -270,11 +288,11 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
     public Node getBefore(Type item) {
         Node temp = new Node(item);
         Node currentNode = startNode;
-        if(currentNode.getLeft().getData().equals(temp.getData())) return currentNode;
-        if(currentNode.getRight().getData().equals(temp.getData())) return currentNode;
+
+        if(item.equals(startNode.getData())) throw new IndexOutOfBoundsException("The data is at the first Node");
 
         while (currentNode.getLeft() != null|| currentNode.getRight() != null) {
-            if (temp.getData().compareTo(currentNode.getLeft().getData()) < 0) {
+            if (currentNode.getLeft() != null && temp.getData().compareTo(currentNode.getLeft().getData()) < 0) {
                 if(temp.getData().compareTo(currentNode.getLeft().getData()) == 0){
                     return currentNode;
                 }
@@ -285,7 +303,7 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
                 }
 
             }
-            if(temp.getData().compareTo(currentNode.getData()) >0) {
+            if(currentNode.getRight() != null && temp.getData().compareTo(currentNode.getData()) >0) {
                 if(temp.getData().compareTo((Type)currentNode.getRight().getData()) == 0){
                     return currentNode;
                 }
@@ -299,20 +317,17 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
         return null;
     }
     private Node getLeftMostNode(Node node){
-        Node temp = node;
-        while(!temp.getLeft().equals(null)){
-            if(temp.getLeft().equals(null)) return temp.getLeft();
-            temp = node.getLeft();
+        if(node.getLeft() == null) {
+            return node;
         }
-        return temp;
+        return getRightMostNode(node.getLeft());
     }
+
     private Node getRightMostNode(Node node){
-        Node temp = node;
-        while(!temp.getRight().equals(null)){
-            if(temp.getRight().equals(null)) return temp.getLeft();
-            temp = node.getRight();
+        if(node.getRight() == null) {
+            return node;
         }
-        return temp;
+        return getLeftMostNode(node.getRight());
     }
 
 }
