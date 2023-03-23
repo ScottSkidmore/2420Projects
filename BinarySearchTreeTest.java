@@ -22,7 +22,6 @@ public class BinarySearchTreeTest {
 
     @Test
     void leftMostNodeHeavyRight(){
-        Node<Integer> node = new Node<Integer>(0);
         ArrayList<Integer> list = new ArrayList<>();
         list.add(2);
         list.add(5);
@@ -30,7 +29,7 @@ public class BinarySearchTreeTest {
         for(int i = 0; i < 10; i++){
             balls.add(i);
         }
-        assertEquals(node.getData(), balls.getLeftMostNode(node).getData());
+        assertEquals(0, balls.getLeftMostNode(balls.getStartNode()).getData());
 
     }
     @Test
@@ -59,6 +58,22 @@ public class BinarySearchTreeTest {
             balls.add(j);
         }
         assertEquals(node.getData(), balls.getLeftMostNode(node).getData());
+    }
+    @Test
+    void sizeTestAddOnEmpty(){
+        balls.add(2);
+        balls.add(5);
+        balls.add(6);
+       
+        assertEquals(3, balls.size());
+    }
+    @Test
+    void lastTestAddOnEmpty(){
+        balls.add(2);
+        balls.add(5);
+        balls.add(6);
+       
+        assertEquals(6, balls.last());
     }
 //all the assert equala above are wrong
 
