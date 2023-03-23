@@ -13,25 +13,26 @@ public class GraphUtilityTest {
 	
 	@Test
 	void timingTestPushArray() {
-		List<Integer> first = new ArrayList<>();
-        List<Integer> second = new ArrayList<>();
+		
     	int time=100000;
 		for(int i=0;i<10;i++) {
+			List<Integer> first = new ArrayList<>();
+	        List<Integer> second = new ArrayList<>();
         int count=0;
         for (int k=0;k<time;k++) {
-   
+        
         		first.add(k);
-        		second.add(count+1);
-        		first.add(k);
-        		second.add(k-1);
+        		second.add(k+1);
+        		
         		count++;
+        		
   
         }
 		double startTime=System.nanoTime();
-		GraphUtility.areConnected(first, second, 0, 1000);
+		GraphUtility.sort(first, second);
 		double endTime=System.nanoTime();
 		System.out.println(Double.toString(endTime-startTime));
-		time=time+100000;
+		time=time+1000000;
 		}
 
 	}
