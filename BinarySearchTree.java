@@ -1,11 +1,10 @@
 package assign08;
 
-import assign07.Edge;
-import assign07.Vertex;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
+
 import java.util.NoSuchElementException;
 
 /**
@@ -20,10 +19,11 @@ import java.util.NoSuchElementException;
 public class BinarySearchTree<Type extends Comparable<? super Type>> implements SortedSet<Type>{
     private int size=0;
     private Node<Type> startNode = null;
-    public BinarySearchTree(Node<Type> n){
-        this.startNode = n;
-        this.size=1;
+    public BinarySearchTree() {
 
+    }
+    public Node<Type> getStartNode(){
+        return startNode;
     }
 
     /**
@@ -35,20 +35,30 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public boolean add(Type item) {
+        System.out.println(item);
         Node<Type> temp = new Node<Type>(item);
-        Node<Type> currentNode = startNode;
-        if(temp.getData().compareTo(currentNode.getData()) == 0){
+        if (startNode==null) {
+            startNode=temp;
+            size++;
+            return true;
+        }
+        if(contains(item)) {
             return false;
         }
+        Node<Type> currentNode = startNode;
+//        if(temp.getData().compareTo(currentNode.getData()) == 0){
+//            return false;
+//        }
         while (currentNode.getLeft()!=(null)|| currentNode.getRight()!=(null)) {
-            if(temp.getData().compareTo(currentNode.getData()) ==0) {
-                return false;
-            }
+//            if(temp.getData().compareTo(currentNode.getData()) ==0) {
+//                return false;
+//            }
 
             if (temp.getData().compareTo(currentNode.getData()) < 0) {
                 if (currentNode.getLeft() == null) {
                     currentNode.setLeft(temp);
                     System.out.println(currentNode.getData() + " left Child equals " + temp.getData());
+                    size++;
                     return true;
                 }
 
@@ -62,6 +72,7 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
                 if (currentNode.getRight() == null) {
                     currentNode.setRight(temp);
                     System.out.println(currentNode.getData() + " Right Child equals " + temp.getData());
+                    size++;
                     return true;
                 } else {
                     currentNode = currentNode.getRight();
@@ -75,9 +86,10 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
             currentNode.setRight(temp);
             System.out.println(currentNode.getData() + " Right Child equals " + temp.getData());
         }
-        this.size=this.size+1;
+        size++;
         return true;
     }
+
 
     /**
      * Ensures that this set contains all items in the specified collection.
@@ -116,35 +128,63 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public boolean contains(Type item) {
-        Node<Type> temp = new Node<Type>(item);
         Node<Type> currentNode = startNode;
-        if(currentNode.getData() == temp.getData()) return true;
+
+        if(item.equals(startNode.getData())) return true;
 
         while (currentNode.getLeft() != null|| currentNode.getRight() != null) {
-            if (temp.getData().compareTo(currentNode.getData()) < 0) {
-                if(temp.getData().compareTo(currentNode.getLeft().getData()) == 0){
-                    return true;
-                }
-                if (currentNode.getLeft().equals(null)) {
-                    return false;
-                } else {
+            if (currentNode.getLeft() != null && item.compareTo(currentNode.getData()) < 0) {
+                if(item.compareTo(currentNode.getLeft().getData()) < 0){
                     currentNode = currentNode.getLeft();
+                }
+                if(item.compareTo(currentNode.getLeft().getData()) > 0){
+                    if (currentNode.getLeft().getRight() == null) return false;
+                    currentNode = currentNode.getLeft().getRight();
+                }
+
+                else{
+                    return true;
                 }
 
             }
-            if(temp.getData().compareTo(currentNode.getData()) >0) {
-                if(temp.getData().compareTo(currentNode.getRight().getData()) == 0){
-                    return true;
+            if(currentNode.getRight() != null && item.compareTo(currentNode.getData()) > 0) {
+                if(item.compareTo(currentNode.getRight().getData()) < 0){
+                    currentNode = currentNode.getLeft();
                 }
-                if (currentNode.getRight().equals(null)) {
-                    return false;
-                } else {
+                if(item.compareTo(currentNode.getRight().getData()) > 0){
                     currentNode = currentNode.getRight();
                 }
+
+                else{
+                    return true;
+                }
+
             }
         }
         return false;
     }
+
+    public Node<Type> getLeftMostNode(Node<Type> node){
+        if(node.getLeft() == null) {
+            return node;
+        }
+        return getLeftMostNode(node.getLeft());
+    }
+
+    private Node<Type> getRightMostNode(Node<Type> node){
+        if(node.getRight() == null) {
+            return node;
+        }
+        return getRightMostNode(node.getRight());
+    }
+    private void inOrder(Node<Type> startNode,ArrayList<Type> arr) {
+        if (startNode==null) return;
+        inOrder(startNode.getLeft(),arr);
+        arr.add(startNode.getData());
+        inOrder(startNode.getRight(),arr);
+
+    }
+
 
     /**
      * Determines if for each item in the specified collection, there is an item in
@@ -187,7 +227,7 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public boolean isEmpty() {
-        if(startNode.equals(null)){
+        if(startNode==null){
             return true;
         }
         return false;
@@ -200,15 +240,10 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public Type last() throws NoSuchElementException {
-        Node<Type> temp = startNode;
         if(startNode == null)throw new NoSuchElementException("Set is empty");
         else{
-            while(temp!=null){
-                if (temp.getRight() == null) return (Type)temp.getData();
-                temp = temp.getRight();
-            }
+            return getRightMostNode(startNode).getData();
         }
-        return null;
     }
 
     /**
@@ -220,6 +255,8 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public boolean remove(Type item) {
+        System.out.println("call");
+        if(startNode==null)return false;
         if(startNode.getData().equals(item)){
             if (startNode.getRight() == null) {
                 startNode = startNode.getLeft();
@@ -260,24 +297,25 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
             size=size-1;
             return true;
         }
+        if (parent.getLeft()!=null) {
+            if(parent.getLeft().getData().equals(item)){
+                if (parent.getLeft().getRight() == null) {
+                    parent.setLeft(parent.getRight().getLeft());
+                    size=size-1;
+                    return true;
+                }
 
-        if(parent.getLeft().getData().equals(item)){
-            if (parent.getLeft().getRight() == null) {
-                parent.setLeft(parent.getRight().getLeft());
+                if(parent.getLeft().getLeft() == null) {
+                    parent.setLeft(parent.getLeft().getRight());
+                    size=size-1;
+                    return true;
+                }
+
+                getLeftMostNode(parent.getLeft().getRight()).setLeft(parent.getRight().getLeft());
+                parent.setRight(parent.getLeft().getRight());
                 size=size-1;
                 return true;
             }
-
-            if(parent.getLeft().getLeft() == null) {
-                parent.setLeft(parent.getLeft().getRight());
-                size=size-1;
-                return true;
-            }
-
-            getLeftMostNode(parent.getLeft().getRight()).setLeft(parent.getRight().getLeft());
-            parent.setRight(parent.getLeft().getRight());
-            size=size-1;
-            return true;
         }
         return false;
     }
@@ -316,9 +354,6 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public ArrayList<Type>toArrayList() {
-        if (startNode==null) {
-            throw new NullPointerException();
-        }
         ArrayList<Type> t=new ArrayList<Type>();
         inOrder(startNode,t);
         return t;
@@ -365,30 +400,5 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
         }
         return currentNode;
     }
-
-    public Node<Type> getLeftMostNode(Node<Type> node){
-        if(node.getLeft() == null) {
-            return node;
-        }
-        return getLeftMostNode(node.getLeft());
-    }
-
-    private Node<Type> getRightMostNode(Node<Type> node){
-        if(node.getRight() == null) {
-            return node;
-        }
-        return getRightMostNode(node.getRight());
-    }
-    private void inOrder(Node<Type> startNode,ArrayList<Type> arr) {
-        if (startNode==null) return;
-        inOrder(startNode.getLeft(),arr);
-        arr.add(startNode.getData());
-        inOrder(startNode.getRight(),arr);
-
-    }
-
-
-
-
 
 }
