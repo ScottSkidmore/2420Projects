@@ -18,12 +18,10 @@ import java.util.NoSuchElementException;
  * @version March 20, 2023
  */
 public class BinarySearchTree<Type extends Comparable<? super Type>> implements SortedSet<Type>{
-	private int size=0;
+    private int size=0;
     private Node<Type> startNode = null;
-    public BinarySearchTree(Node<Type> n){
-        this.startNode = n;
-        this.size=1;
-        
+    public BinarySearchTree() {
+
     }
 
     /**
@@ -36,20 +34,28 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
     @Override
     public boolean add(Type item) {
         Node<Type> temp = new Node<Type>(item);
+        if (startNode==null) {
+        	startNode=temp;
+        	return true;
+        }
         Node<Type> currentNode = startNode;
         if(temp.getData().compareTo(currentNode.getData()) == 0){
             return false;
         }
         while (currentNode.getLeft()!=(null)|| currentNode.getRight()!=(null)) {
-            if(temp.getData().compareTo(currentNode.getData()) ==0){
+            if(temp.getData().compareTo(currentNode.getData()) ==0) {
                 return false;
             }
+
             if (temp.getData().compareTo(currentNode.getData()) < 0) {
-                if (currentNode.getLeft().getData().equals(null)) {
+                if (currentNode.getLeft() == null) {
                     currentNode.setLeft(temp);
                     System.out.println(currentNode.getData() + " left Child equals " + temp.getData());
                     return true;
-                } else {
+                }
+
+
+                else {
                     currentNode = currentNode.getLeft();
                 }
 
@@ -90,7 +96,7 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
                 return false;
             }
         }
-       return true;
+        return true;
     }
 
     /**
@@ -196,14 +202,14 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public Type last() throws NoSuchElementException {
-            Node<Type> temp = startNode;
-            if(startNode == null)throw new NoSuchElementException("Set is empty");
-            else{
-                while(temp!=null){
-                    if (temp.getRight() == null) return (Type)temp.getData();
-                    temp = temp.getRight();
-                }
+        Node<Type> temp = startNode;
+        if(startNode == null)throw new NoSuchElementException("Set is empty");
+        else{
+            while(temp!=null){
+                if (temp.getRight() == null) return (Type)temp.getData();
+                temp = temp.getRight();
             }
+        }
         return null;
     }
 
@@ -312,11 +318,11 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
      */
     @Override
     public ArrayList<Type>toArrayList() {
-    	if (startNode==null) {
-    		throw new NullPointerException();
-    	}
-    	ArrayList<Type> t=new ArrayList<Type>();
-    	inOrder(startNode,t);
+        if (startNode==null) {
+            throw new NullPointerException();
+        }
+        ArrayList<Type> t=new ArrayList<Type>();
+        inOrder(startNode,t);
         return t;
     }
 
@@ -362,7 +368,7 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
         return currentNode;
     }
 
-    private Node<Type> getLeftMostNode(Node<Type> node){
+    public Node<Type> getLeftMostNode(Node<Type> node){
         if(node.getLeft() == null) {
             return node;
         }
@@ -376,13 +382,13 @@ public class BinarySearchTree<Type extends Comparable<? super Type>> implements 
         return getRightMostNode(node.getRight());
     }
     private void inOrder(Node<Type> startNode,ArrayList<Type> arr) {
-    	if (startNode==null) return;
-    	inOrder(startNode.getLeft(),arr);
-    	arr.add(startNode.getData());
-    	inOrder(startNode.getRight(),arr);
-    	
+        if (startNode==null) return;
+        inOrder(startNode.getLeft(),arr);
+        arr.add(startNode.getData());
+        inOrder(startNode.getRight(),arr);
+
     }
-  
+
 
 
 
