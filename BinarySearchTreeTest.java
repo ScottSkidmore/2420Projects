@@ -10,8 +10,9 @@ import java.util.TreeSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BinarySearchTreeTest {
-//    Node<Integer> startNode = new Node<Integer>(3);
-//    BinarySearchTree<Integer> balls = new BinarySearchTree<Integer>();
+    Node<Integer> startNode = new Node<Integer>(3);
+    BinarySearchTree<Integer> balls = new BinarySearchTree<Integer>();
+    BinarySearchTree<String> ball = new BinarySearchTree<String>();
 //    @Test
 //    void addSmall(){
 //        ArrayList<Integer> list = new ArrayList<>();
@@ -88,7 +89,7 @@ public class BinarySearchTreeTest {
 //        	balls.contains(i);
 //        }
     	System.out.println("contains test");
-    	int total=10000;
+    	int total=1000;
     	for(int j=0;j<19;j++) {
     	BinarySearchTree<Integer> ball=new BinarySearchTree<Integer>();
         for(int i=0;i<total;i++) {
@@ -100,7 +101,7 @@ public class BinarySearchTreeTest {
         }
        double endTime=System.nanoTime();
        System.out.println(Double.toString(endTime-startTime));
-       total=total+10000;
+       total=total+1000;
     	}
     }
     @Test
@@ -114,7 +115,7 @@ public class BinarySearchTreeTest {
 //        	balls.contains(i);
 //        }
     	System.out.println("contains random test");
-    	int total=10000;
+    	int total=1000;
     	for(int j=0;j<19;j++) {
     	BinarySearchTree<Integer> ball=new BinarySearchTree<Integer>();
     	
@@ -134,13 +135,13 @@ public class BinarySearchTreeTest {
         }
        double endTime=System.nanoTime();
        System.out.println(Double.toString(endTime-startTime));
-       total=total+10000;
+       total=total+1000;
     	}
     }
     @Test
     void timingTest3(){
     	System.out.println("tree set test");
-    	int total=10000;
+    	int total=1000;
     	for(int j=0;j<19;j++) {
     	TreeSet<Integer> ball=new TreeSet<Integer>();
     	
@@ -160,10 +161,64 @@ public class BinarySearchTreeTest {
         }
        double endTime=System.nanoTime();
        System.out.println(Double.toString(endTime-startTime));
-       total=total+10000;
+       total=total+1000;
     	}
     }
 //all the assert equala above are wrong
-
+//	  @Test
+//	    void containsOnSmall() {
+//	        for (int i = 10; i > 0; i--) {
+//	            balls.add(i);
+//	            balls.add(10);
+//	            balls.add(11);
+//	            balls.add(0);
+//	        }
+//	        assertEquals(true, balls.contains(2));
+//	        assertEquals(true, balls.contains(11));
+//	        assertEquals(true, balls.contains(0));
+//	    }
+//	  @Test
+//	    void containsOnString() {
+//		  
+//	        ball.add("cat");
+//	        ball.add("steve");
+//	        ball.add("stove");
+//	        
+//	        assertEquals(true, ball.contains("stove"));
+//	    }
+//	  @Test
+//	    void spellChecker() {
+//		  ArrayList<String>arr= new ArrayList<String>();
+//		  arr.add("and");
+//		  arr.add("raining");
+//		  arr.add("cats");
+//		  arr.add("dogs");
+//		  
+//	        SpellChecker check=new SpellChecker(arr);
+//	        ArrayList<String>arr1= new ArrayList<String>();
+//			  arr1.add("and");
+//			  arr1.add("raining");
+//			  arr1.add("cats");
+//			  arr1.add("dogs");
+//			  arr1.add("its");
+//	        check.spellCheck(arr1);
+//	       System.out.println(check.spellCheck(arr1).toString());
+//	    }
+//	  @Test
+//	    void removeOnRandoms(){
+//	      int a = 0; 
+//		  ArrayList<Integer> list = new ArrayList<Integer>();
+//	        int[] array={1882703391,-483649543,1059174907,182361766,639244271,-567159552,-762226503,511044042,633591167,254921129,-567159552};
+//	        for(int i = 0; i < 100; i++){
+//	            Random r = new Random();
+//	            int j = r.nextInt();
+//	        	balls.add(j);
+//	        	if(i == 5) {
+//	        		a = j;
+//	        	}
+//	        }
+//	        assertEquals(true, balls.contains(a));
+//	    }
+//	  
 }
 

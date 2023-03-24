@@ -10,8 +10,8 @@ import java.util.Scanner;
  * Represents a "dictionary" of strings using a binary search tree and offers
  * methods for spell-checking documents.
  * 
- * @author Erin Parker and ??
- * @version March 17, 2022
+ * @author Erin Parker and Nate Zuro and Scott Skidmore
+ * @version March 23, 2023
  */
 public class SpellChecker {
 
@@ -38,7 +38,7 @@ public class SpellChecker {
 	 * Creates dictionary from a file.
 	 * 
 	 * @param dictionaryFile - the File that contains Strings used to build the
-	 *                        dictionary
+	 *                       dictionary
 	 */
 	public SpellChecker(File dictionaryFile) {
 		this();
@@ -73,11 +73,33 @@ public class SpellChecker {
 	public List<String> spellCheck(File documentFile) {
 
 		List<String> wordsToCheck = readFromFile(documentFile);
-		List<String> missSpelled=new ArrayList<String>();
-		for(String s:wordsToCheck) {
-			if(dictionary.contains(s)==false) {
+		List<String> missSpelled = new ArrayList<String>();
+		for (String s : wordsToCheck) {
+			if (dictionary.contains(s)) {
+			} else {
 				missSpelled.add(s);
 			}
+
+		}
+
+		return missSpelled;
+	}
+
+	/**
+	 * This method checks if the string is in the dictionary/binary search tree, and
+	 * adds it to the misspelled list if its not in the dictionary.
+	 * 
+	 * @param arr the list of words you want to spell check
+	 * @return the list of mispelled words
+	 */
+	public List<String> spellCheck(ArrayList<String> arr) {
+		List<String> missSpelled = new ArrayList<String>();
+		for (String s : arr) {
+			if (dictionary.contains(s)) {
+			} else {
+				missSpelled.add(s);
+			}
+
 		}
 
 		return missSpelled;
@@ -94,8 +116,8 @@ public class SpellChecker {
 
 	/**
 	 * Returns a list of the words contained in the specified file. (Note that
-	 * symbols, digits, and spaces are ignored; and all words are converted
-	 * to lower case.)
+	 * symbols, digits, and spaces are ignored; and all words are converted to lower
+	 * case.)
 	 * 
 	 * @param file - the File to be read
 	 * @return a List of the Strings in the input file
@@ -122,14 +144,13 @@ public class SpellChecker {
 
 			while (fileInput.hasNext()) {
 				String s = fileInput.next();
-				if (!s.equals("")) 
+				if (!s.equals(""))
 					words.add(s.toLowerCase());
 			}
-			
+
 			fileInput.close();
 
-		} 
-		catch(FileNotFoundException e) {
+		} catch (FileNotFoundException e) {
 			System.err.println("File " + file + " cannot be found.");
 		}
 
