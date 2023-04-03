@@ -14,8 +14,8 @@ public class HashTable<K, V> implements Map<K, V>{
     private int arrSize;
 
     public HashTable(){
-        this.arr = new ArrayList<MapEntry<K,V>>(23);
-        while(arr.size()<24) {
+        this.arr = new ArrayList<MapEntry<K,V>>();
+        for(int i=0;i<24;i++) {
         	arr.add(null);
         }
         arrSize=23;
@@ -149,8 +149,11 @@ public class HashTable<K, V> implements Map<K, V>{
     		else {
     			
     			entry=ogentry+(i*i);
-    			if(entry>=arrSize)entry=entry-arrSize;
+    			while(entry>=arr.size()-1) {
+    				entry=entry-(arr.size()-1);
+    			}
     		}
+    		System.out.println(entry);
     	}
     		arr.set(entry,me);
         size++;
@@ -175,7 +178,7 @@ public class HashTable<K, V> implements Map<K, V>{
     public V remove(K key) {
     	if(containsKey(key)) {
     		V holder=get(key);
-    		put(key,(V)"ben jones");
+    		put(key,(V) "ben");
     		size--;
     		return holder;
     	}
@@ -195,6 +198,7 @@ public class HashTable<K, V> implements Map<K, V>{
     }
     public int compress(int number){
         if(number<0)number = number*-1;
+        System.out.println(number%arr.size());
     	return number%arr.size();
     }
     public void reHash(ArrayList<MapEntry<K,V>> arr) {
@@ -204,7 +208,7 @@ public class HashTable<K, V> implements Map<K, V>{
         ArrayList<MapEntry<K, V>> newArr = new ArrayList<MapEntry<K, V>>(arrSize);
 
         for (int i = 0; i< arrSize; i++) {
-            if (arr.get(i).equals((V)"ben jones")) {
+            if (arr.get(i).equals(new MapEntry<K,String>(arr.get(i).getKey(),"ben") )) {
             }
             else if(arr.get(i) != null){
                 put(arr.get(i).getKey(), arr.get(i).getValue());
