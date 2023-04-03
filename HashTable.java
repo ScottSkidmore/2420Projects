@@ -1,16 +1,18 @@
 package assign09;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+
+import static java.math.BigInteger.valueOf;
 
 public class HashTable<K, V> implements Map<K, V>{
 
-    private List<MapEntry<K,V>> arr;
+    private ArrayList<MapEntry<K,V>> arr;
 
     private int size = 0;
 
-    public void HashTable(){
+    public HashTable(){
         this.arr = new ArrayList<MapEntry<K,V>>(23);
     }
 
@@ -35,16 +37,9 @@ public class HashTable<K, V> implements Map<K, V>{
      * @return true if this map contains the key, false otherwise
      */
     @Override
-    public boolean containsKey(Object key) {
-        int originalIndex = compress(key.hashCode());
-        int newIndex = originalIndex;
-        int i = 1;
-        while(arr.get(newIndex) != null){
-            if(arr.get(newIndex).getKey() == key) return true;
-            newIndex = originalIndex*(i*i);
-            i++;
-        }
-        return false;
+    public boolean containsKey(K key) {
+        if (get(key) == null) return false;
+        else return true;
     }
 
     /**
@@ -58,7 +53,11 @@ public class HashTable<K, V> implements Map<K, V>{
      *         false otherwise
      */
     @Override
-    public boolean containsValue(Object value) {
+    public boolean containsValue(V value) {
+        for (MapEntry<K,V> item: arr){
+            V valuePair = item.getValue();
+            if(valuePair.equals(value)) return true;
+        }
         return false;
     }
 
@@ -86,7 +85,16 @@ public class HashTable<K, V> implements Map<K, V>{
      *         contains no mapping for the key
      */
     @Override
-    public Object get(Object key) {
+    public V get(K key) {
+        int originalIndex = compress(key.hashCode());
+        int newIndex = originalIndex;
+        int i = 1;
+        while(arr.get(newIndex) != null){
+            if(arr.get(newIndex).getKey() == key) return arr.get(newIndex).getValue();
+            newIndex = originalIndex+(i*i);
+            i++;
+            if(newIndex >= arr.size()) newIndex = newIndex - arr.size();
+        }
         return null;
     }
 
@@ -99,7 +107,8 @@ public class HashTable<K, V> implements Map<K, V>{
      */
     @Override
     public boolean isEmpty() {
-        return false;
+        if(size == 0) return true;
+        else return false;
     }
 
     /**
@@ -115,7 +124,7 @@ public class HashTable<K, V> implements Map<K, V>{
      *         mapping for key
      */
     @Override
-    public Object put(Object key, Object value) {
+    public Object put(K key, V value) {
 
         size++;
         return null;
@@ -131,7 +140,19 @@ public class HashTable<K, V> implements Map<K, V>{
      *         mapping for key
      */
     @Override
-    public Object remove(Object key) {
+    public V remove(K key) {
+        int originalIndex = compress(key.hashCode());
+        int newIndex = originalIndex;
+        int i = 1;
+        while(arr.get(newIndex) != null){
+            if(arr.put(newIndex).getKey() == key) {
+                arr.get(newIndex) == "fuckBenJones";
+                return arr.get(newIndex).getValue();
+            }
+            newIndex = originalIndex+(i*i);
+            i++;
+            if(newIndex >= arr.size()) newIndex = newIndex - arr.size();
+        }
         return null;
     }
 
@@ -148,6 +169,20 @@ public class HashTable<K, V> implements Map<K, V>{
     }
     public int compress(int number){
         return number%arr.size();
+    }
+
+    public ArrayList<MapEntry<K,V>> reHash(ArrayList<MapEntry<K,V>> arr) {
+        BigInteger num = (valueOf(arr.size())).nextProbablePrime();
+        int arrSize = num.intValue();
+        ArrayList<MapEntry<K, V>> newArr = new ArrayList<MapEntry<K, V>>(arrSize);
+
+        for (MapEntry<K, V> item : arr) {
+            if (item.equals("ben jones is a pussy")) {
+            } else {
+                put(item.getKey(), item.getValue());
+            }
+        }
+        return newArr;
     }
 
 
