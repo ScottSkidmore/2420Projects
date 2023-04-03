@@ -14,8 +14,8 @@ public class HashTable<K, V> implements Map<K, V>{
     private int arrSize;
 
     public HashTable(){
-        this.arr = new ArrayList<MapEntry<K,V>>(23);
-        while(arr.size()<24) {
+        this.arr = new ArrayList<MapEntry<K,V>>();
+        for(int i=0;i<24;i++) {
             arr.add(null);
         }
         arrSize=23;
@@ -99,7 +99,7 @@ public class HashTable<K, V> implements Map<K, V>{
         int newIndex = originalIndex;
         int i = 1;
         while(arr.get(newIndex) != null){
-            if(arr.get(newIndex).getKey() == key) return arr.get(newIndex).getValue();
+            if(arr.get(newIndex).getKey().equals(key)) return arr.get(newIndex).getValue();
             newIndex = originalIndex+(i*i);
             i++;
             if(newIndex >= arrSize) newIndex = newIndex - arrSize;
@@ -134,25 +134,28 @@ public class HashTable<K, V> implements Map<K, V>{
      */
     @Override
     public V put(K key, V value) {
-        System.out.print(key);
+        System.out.println(key);
         MapEntry<K,V> me=new MapEntry<K, V>(key,value);
         int entry=compress(key.hashCode());
         int ogentry=entry;
         int i =0;
         while(arr.get(entry)!=null) {
             i++;
-            if(arr.get(entry).getKey().equals(me)) {
+            if(arr.get(entry).getKey().equals(me.getKey())) {
                 MapEntry<K,V> holder=arr.get(entry);
-                arr.add(entry,me);
+                arr.set(entry,me);
                 return holder.getValue();
             }
             else {
 
                 entry=ogentry+(i*i);
-                if(entry>=arrSize)entry=entry-arrSize;
+                while(entry>=arr.size()-1) {
+                    entry=entry-(arr.size()-1);
+                }
             }
+            System.out.println(entry);
         }
-        arr.add(entry,me);
+        arr.set(entry,me);
         size++;
         double size=arrSize;
         double currentSize=this.size;
@@ -175,7 +178,7 @@ public class HashTable<K, V> implements Map<K, V>{
     public V remove(K key) {
         if(containsKey(key)) {
             V holder=get(key);
-            put(key,(V)"ben jones");
+            put(key,(V) "ben");
             size--;
             return holder;
         }
@@ -195,22 +198,24 @@ public class HashTable<K, V> implements Map<K, V>{
     }
     public int compress(int number){
         if(number<0)number = number*-1;
-        return number%arrSize;
+        System.out.println(number%arr.size());
+        return number%arr.size();
     }
     public void reHash(ArrayList<MapEntry<K,V>> arr) {
-        BigInteger num = (valueOf(arr.size())).nextProbablePrime();
+        BigInteger num = (valueOf(arrSize*2)).nextProbablePrime();
         int arrSize = num.intValue();
         this.arrSize=arrSize;
         ArrayList<MapEntry<K, V>> newArr = new ArrayList<MapEntry<K, V>>(arrSize);
 
         for (int i = 0; i< arrSize; i++) {
-            if (arr.get(i).equals((V)"ben jones")) {
+            if (arr.get(i) != null && arr.get(i).equals(new MapEntry<K,String>(arr.get(i).getKey(),"ben") )) {
             }
             else if(arr.get(i) != null){
                 put(arr.get(i).getKey(), arr.get(i).getValue());
             }
-            else newArr.add(null);
+            else newArr.set(i, null);
         }
         this.arr = newArr;
     }
+
 }
