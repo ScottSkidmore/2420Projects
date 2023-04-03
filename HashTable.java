@@ -99,7 +99,7 @@ public class HashTable<K, V> implements Map<K, V>{
         int newIndex = originalIndex;
         int i = 1;
         while(arr.get(newIndex) != null){
-            if(arr.get(newIndex).getKey() == key) return arr.get(newIndex).getValue();
+            if(arr.get(newIndex).getKey().equals(key)) return arr.get(newIndex).getValue();
             newIndex = originalIndex+(i*i);
             i++;
             if(newIndex >= arrSize) newIndex = newIndex - arrSize;
@@ -134,16 +134,16 @@ public class HashTable<K, V> implements Map<K, V>{
      */
     @Override
     public V put(K key, V value) {
-    	System.out.print(key);
+    	System.out.println(key);
     	MapEntry<K,V> me=new MapEntry<K, V>(key,value);
     	int entry=compress(key.hashCode());
     	int ogentry=entry;
     	int i =0;
     	while(arr.get(entry)!=null) {
     		i++;
-    		if(arr.get(entry).getKey().equals(me)) {
+    		if(arr.get(entry).getKey().equals(me.getKey())) {
     			MapEntry<K,V> holder=arr.get(entry);
-    			arr.add(entry,me);
+    			arr.set(entry,me);
     			return holder.getValue();
     		}
     		else {
@@ -152,7 +152,7 @@ public class HashTable<K, V> implements Map<K, V>{
     			if(entry>=arrSize)entry=entry-arrSize;
     		}
     	}
-    		arr.add(entry,me);
+    		arr.set(entry,me);
         size++;
         double size=arrSize;
         double currentSize=this.size;
@@ -195,21 +195,23 @@ public class HashTable<K, V> implements Map<K, V>{
     }
     public int compress(int number){
         if(number<0)number = number*-1;
-    	return number%arrSize;
+    	return number%arr.size();
     }
-    public ArrayList<MapEntry<K,V>> reHash(ArrayList<MapEntry<K,V>> arr) {
-        BigInteger num = (valueOf(arr.size())).nextProbablePrime();
+    public void reHash(ArrayList<MapEntry<K,V>> arr) {
+        BigInteger num = (valueOf(arrSize*2)).nextProbablePrime();
         int arrSize = num.intValue();
         this.arrSize=arrSize;
         ArrayList<MapEntry<K, V>> newArr = new ArrayList<MapEntry<K, V>>(arrSize);
 
-        for (MapEntry<K, V> item : arr) {
-            if (item.equals((V)"ben jones")) {
-            } else {
-                put(item.getKey(), item.getValue());
+        for (int i = 0; i< arrSize; i++) {
+            if (arr.get(i).equals((V)"ben jones")) {
             }
+            else if(arr.get(i) != null){
+                put(arr.get(i).getKey(), arr.get(i).getValue());
+            }
+            else newArr.add(null);
         }
-        return newArr;
+        this.arr = newArr;
     }
 
 
