@@ -106,7 +106,7 @@ public class HashTable<K, V> implements Map<K, V>{
         int originalIndex = compress(key.hashCode());
         int newIndex = originalIndex;
         int i = 1;
-        while(arr.get(newIndex) != null){
+        while(arr.get(newIndex) != null && arr.get(newIndex).getRemoved() != true){
             if(arr.get(newIndex).getKey().equals(key)) return arr.get(newIndex).getValue();
             newIndex = originalIndex+(i*i);
             i++;
@@ -237,9 +237,10 @@ public class HashTable<K, V> implements Map<K, V>{
         this.arrSize = this.arr.size();
 
         for (int i = 0; i < ogArray; i++) {
+            if(copy.get(i) != null && copy.get(i).getRemoved() == true)size--;
+
             if(copy.get(i) != null && copy.get(i).getRemoved() !=true){
                 put(copy.get(i).getKey(),copy.get(i).getValue());
-                this.size++;
             }
         }
 
