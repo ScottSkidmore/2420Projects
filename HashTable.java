@@ -110,7 +110,7 @@ public class HashTable<K, V> implements Map<K, V>{
             if(arr.get(newIndex).getKey().equals(key)) return arr.get(newIndex).getValue();
             newIndex = originalIndex+(i*i);
             i++;
-            while(newIndex >= arrSize) newIndex = newIndex - arr.size();
+            newIndex = newIndex % arr.size();
         }
         return null;
     }
@@ -165,10 +165,10 @@ public class HashTable<K, V> implements Map<K, V>{
             //System.out.println(entry);
         }
         arr.set(entry,me);
-        size++;
-        double size=arrSize;
+        this.size++;
+
         double currentSize=this.size;
-        if (currentSize/size>=.5) {
+        if (currentSize/arr.size()>=.5) {
             reHash(arr);
         }
         return null;
@@ -185,11 +185,17 @@ public class HashTable<K, V> implements Map<K, V>{
      */
     @Override
     public V remove(K key) {
-        if(containsKey(key)) {
-            V holder=get(key);
-            put(key,(V) "ben");
-            size--;
-            return holder;
+        int originalIndex = compress(key.hashCode());
+        int newIndex = originalIndex;
+        int i = 1;
+        while(arr.get(newIndex) != null){
+            if(arr.get(newIndex).getKey().equals(key)) {
+                arr.get(newIndex).setRemoved();
+                return arr.get(newIndex).getValue();
+            }
+            newIndex = originalIndex+(i*i);
+            i++;
+            newIndex = newIndex % arr.size();
         }
         return null;
     }
@@ -211,24 +217,32 @@ public class HashTable<K, V> implements Map<K, V>{
         return number%arr.size();
     }
     public void reHash(ArrayList<MapEntry<K,V>> arr) {
+        this.size = 0;
         BigInteger num = (valueOf(arr.size()*2)).nextProbablePrime();
         int arrSize = num.intValue();
         this.arrSize=arrSize;
         ArrayList<MapEntry<K, V>> newArr = new ArrayList<MapEntry<K, V>>(arrSize);
+        ArrayList<MapEntry<K, V>> copy = new ArrayList<MapEntry<K,V>>(arr.size());
+
+        for(int i = 0; i < arr.size(); i++){
+            copy.add(arr.get(i));
+        }
 
         for(int i = 0; i < arrSize; i++) {
             newArr.add(null);
         }
 
+        int ogArray = arr.size();
+        this.arr = newArr;
+        this.arrSize = this.arr.size();
 
-        for (int i = 0; i< arr.size(); i++) {
-            if (arr.get(i) != null && arr.get(i).equals(new MapEntry<K,String>(arr.get(i).getKey(),"ben") )) {
-            }
-            else if(arr.get(i) != null){
-                newArr.set(i,arr.get(i));
+        for (int i = 0; i < ogArray; i++) {
+            if(copy.get(i) != null && copy.get(i).getRemoved() !=true){
+                put(copy.get(i).getKey(),copy.get(i).getValue());
+                this.size++;
             }
         }
-        this.arr = newArr;
+
     }
 
 }
