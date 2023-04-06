@@ -13,10 +13,14 @@ public class HashTable<K, V> implements Map<K, V>{
 
     private int arrSize;
 
+    private boolean[] tombStones;
+
     public HashTable(){
         this.arr = new ArrayList<MapEntry<K,V>>(23);
+        tombStones = new boolean[23];
         for(int i=0;i<23;i++) {
             arr.add(null);
+            tombStones[i] = false;
         }
         arrSize=23;
     }
@@ -106,7 +110,7 @@ public class HashTable<K, V> implements Map<K, V>{
         int originalIndex = compress(key.hashCode());
         int newIndex = originalIndex;
         int i = 1;
-        while(arr.get(newIndex) != null && arr.get(newIndex).getRemoved() != true){
+        while(arr.get(newIndex) != null && tombStones[newIndex] != true){
             if(arr.get(newIndex).getKey().equals(key)) return arr.get(newIndex).getValue();
             newIndex = originalIndex+(i*i);
             i++;
@@ -147,24 +151,19 @@ public class HashTable<K, V> implements Map<K, V>{
         int entry=compress(key.hashCode());
         int ogentry=entry;
         int i =0;
-        while(arr.get(entry)!=null) {
+        System.out.println(tombStones.length);
+        System.out.println(arr.size());
+        while(arr.get(entry)!=null && this.tombStones[entry] == false) {
             i++;
             if(arr.get(entry).getKey().equals(me.getKey())) {
                 MapEntry<K,V> holder=arr.get(entry);
                 arr.set(entry,me);
                 return holder.getValue();
             }
-            else if(arr.get(entry).getRemoved() == true){
-                MapEntry<K,V> holder = arr.get(entry);
-                arr.set(entry, me);
-                size++;
-                return null;
-            }
             else {
-
                 entry=ogentry+(i*i);
-                entry=entry%arr.size();
-                }
+                entry=entry%(arr.size());
+            }
 
             //System.out.println(entry);
         }
@@ -193,9 +192,11 @@ public class HashTable<K, V> implements Map<K, V>{
         int i = 1;
         while(arr.get(newIndex) != null){
             if(arr.get(newIndex).getKey().equals(key)) {
-                arr.get(newIndex).setRemoved();
+                tombStones[newIndex] = true;
                 this.size--;
-                return arr.get(newIndex).getValue();
+                V value = arr.get(newIndex).getValue();
+                arr.get(newIndex).setValue(null);
+                return value;
             }
             newIndex = originalIndex+(i*i);
             i++;
@@ -226,26 +227,22 @@ public class HashTable<K, V> implements Map<K, V>{
         int arrSize = num.intValue();
         this.arrSize=arrSize;
         ArrayList<MapEntry<K, V>> newArr = new ArrayList<MapEntry<K, V>>(arrSize);
-        ArrayList<MapEntry<K, V>> copy = new ArrayList<MapEntry<K,V>>(arr.size());
-
-        for(int i = 0; i < arr.size(); i++){
-            copy.add(arr.get(i));
-        }
 
         for(int i = 0; i < arrSize; i++) {
             newArr.add(null);
+
         }
 
-        int ogArray = arr.size();
-        this.arr = newArr;
-        this.arrSize = this.arr.size();
-
-        for (int i = 0; i < ogArray; i++) {
-            if(copy.get(i) != null && copy.get(i).getRemoved() !=true){
-                put(copy.get(i).getKey(),copy.get(i).getValue());
+        for (int i = 0; i < arr.size(); i++) {
+            if(arr.get(i) != null && tombStones[i] !=true){
+                put(arr.get(i).getKey(),arr.get(i).getValue());
             }
         }
-
+        this.arr = newArr;
+        tombStones = new boolean[arrSize];
+        for(int i =0; i < arrSize;i ++){
+            tombStones[i] = false;
+        }
     }
-
+    
 }
