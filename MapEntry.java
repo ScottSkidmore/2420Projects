@@ -1,3 +1,4 @@
+
 package assign09;
 
 /**
@@ -13,7 +14,6 @@ public class MapEntry<K, V> {
 
 	private K key;
 	private V value;
-
 	/**
 	 * Creates a new MapEntry with the specified key and value.
 	 * 
@@ -60,4 +60,7 @@ public class MapEntry<K, V> {
 		
 		return key.equals(rhs.key) && value.equals(rhs.value);
 	}
+
+
+
 }
