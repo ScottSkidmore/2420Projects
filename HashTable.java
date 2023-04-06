@@ -154,19 +154,22 @@ public class HashTable<K, V> implements Map<K, V>{
                 arr.set(entry,me);
                 return holder.getValue();
             }
+            else if(arr.get(entry).getRemoved() == true){
+                MapEntry<K,V> holder = arr.get(entry);
+                arr.set(entry, me);
+                size++;
+                return null;
+            }
             else {
 
                 entry=ogentry+(i*i);
-                while(entry>=arr.size()) {
-                    //System.out.println(entry);
-                    entry=entry-(arr.size());
+                entry=entry%arr.size();
                 }
-            }
+
             //System.out.println(entry);
         }
         arr.set(entry,me);
-        this.size++;
-
+        size++;
         double currentSize=this.size;
         if (currentSize/arr.size()>=.5) {
             reHash(arr);
@@ -191,6 +194,7 @@ public class HashTable<K, V> implements Map<K, V>{
         while(arr.get(newIndex) != null){
             if(arr.get(newIndex).getKey().equals(key)) {
                 arr.get(newIndex).setRemoved();
+                this.size--;
                 return arr.get(newIndex).getValue();
             }
             newIndex = originalIndex+(i*i);
@@ -237,8 +241,6 @@ public class HashTable<K, V> implements Map<K, V>{
         this.arrSize = this.arr.size();
 
         for (int i = 0; i < ogArray; i++) {
-            if(copy.get(i) != null && copy.get(i).getRemoved() == true)size--;
-
             if(copy.get(i) != null && copy.get(i).getRemoved() !=true){
                 put(copy.get(i).getKey(),copy.get(i).getValue());
             }
