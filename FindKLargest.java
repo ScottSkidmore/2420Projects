@@ -1,6 +1,8 @@
 package assign10;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -58,7 +60,12 @@ public class FindKLargest {
 	 * @throws IllegalArgumentException if k is negative or larger than the size of the given list
 	 */
 	public static <E extends Comparable<? super E>> List<E> findKLargestSort(List<E> items, int k) throws IllegalArgumentException {
-		return null;
+		Collections.sort(items);
+		ArrayList<E>ret=new ArrayList<E>();
+		for(int i=0;i<k;i++) {
+			ret.add(items.get(items.size()-i-1));
+		}
+		return ret;
 	}
 
 	/**
@@ -71,7 +78,12 @@ public class FindKLargest {
 	 * @throws IllegalArgumentException if k is negative or larger than the size of the given list
 	 */
 	public static <E> List<E> findKLargestSort(List<E> items, int k, Comparator<? super E> cmp) throws IllegalArgumentException {
-		return null;
+		Collections.sort(items,cmp);
+		ArrayList<E>ret=new ArrayList<E>();
+		for(int i=0;i<k;i++) {
+			ret.add(items.get(items.size()-i-1));
+		}
+		return ret;
 	}
 
 }

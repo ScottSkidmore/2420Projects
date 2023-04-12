@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 
 import org.junit.jupiter.api.Test;
 
 class HeapTest {
 	BinaryMaxHeap<Integer> test=new BinaryMaxHeap<Integer>();
 	ArrayList<Integer> list=new ArrayList<Integer>();
+	Comparator<Integer> cmp= new Comparat<Integer>();
 	@Test
 	void testAdd() {
 	
@@ -35,11 +37,32 @@ class HeapTest {
 		System.out.println(Arrays.toString(test.toArray()));
 	}
 	@Test
-	void testKth() {
+	void testHeapKth() {
 		for (int i = 0; i <100; i++) {
 			list.add(i);
 		}
 		System.out.println(FindKLargest.findKLargestHeap(list,44));
+	}
+	@Test
+	void testSortKth() {
+		for (int i = 0; i <100; i++) {
+			list.add(i);
+		}
+		System.out.println(FindKLargest.findKLargestSort(list,44));
+	}
+	@Test
+	void testSortComparatorKth() {
+		for (int i = 0; i <100; i++) {
+			list.add(i);
+		}
+		System.out.println(FindKLargest.findKLargestSort(list,44,cmp));
+	}
+	class Comparat <E>implements Comparator<Integer>{
+		
+	@Override
+	public int compare(Integer o1, Integer o2) {
+		return o1.compareTo(o2);
+	}
 	}
 
 }
