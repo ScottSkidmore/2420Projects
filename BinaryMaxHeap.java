@@ -3,24 +3,42 @@ package assign10;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+/**
+ * This class contains generic static methods for finding the k largest items in a list.
+ * 
+ * @author Scott Skidmore and Nate Zuro
+ * @version April 12,2023
+ */
 
 public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 	E[]backing;
 	int size=0;
 	Comparator<? super E> needsComparator=null;
+	/**
+	 * Constructor for no list and no comparator
+	 */
 	public BinaryMaxHeap() {
 		backing = (E[]) new Object[10];
 	}
+	/**
+	 * Constructor for no list and comparator
+	 */
 	public BinaryMaxHeap(Comparator<? super E> comp) {
 		backing = (E[]) new Object[10];
 		needsComparator=comp;
 	}
+	/**
+	 * Constructor for list and no comparator
+	 */
 	public BinaryMaxHeap(List<? extends E>list) {
 		backing = (E[]) new Object[list.size()];
 		for(E item:list) {
 			add(item);
 		}
 	}
+	/**
+	 * Constructor for list and comparator
+	 */
 	public BinaryMaxHeap(List<? extends E>list, Comparator<? super E>comp) {
 		backing = (E[]) new Object[list.size()];
 		needsComparator=comp;
@@ -28,11 +46,18 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 			add(item);
 		}
 	}
+	/**
+	 * function that constructs a max heap by percolating down the first half of an array.
+	 */
 	public void buildHeap() {
 		for(int i=size/2;i>0;i--) {
 			percolateDown(i);
 		}
 	}
+	/**
+	 * shifts an element in a heap up until it reaches the correct position
+	 * @param index of the element we want to percolate up
+	 */
 	private void percolateUp(int index) {
 		 int newIndex = (index ) / 2;
 		 while(newIndex>0 && innerCompare(backing[index],backing[newIndex])>0) {
@@ -41,11 +66,21 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 			 newIndex = (index ) / 2;
 		 }
 	}
+	/**
+	 * switches two element in a array
+	 * @param array the array containing the elements
+	 * @param first the first element we want to swap
+	 * @param second the second element we want to swap
+	 */
 	private void swap(E[] array,int first,int second) {
 		E temp=array[first];
 		array[first]=array[second];
 		array[second]=temp;
 	}
+	/**
+	 * shifts an element in a heap down until it reaches the correct position
+	 * @param index of the element we want to shift
+	 */
 	private void percolateDown(int index) {
 		
 		while ((index*2)+1<=size&&(innerCompare(backing[index],backing[index*2])<0||innerCompare(backing[index],backing[(index*2)+1])<0)) {
@@ -60,6 +95,12 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 		
 		}
 	}
+	/**
+	 * checks if the heap uses a custom comparator and then makes a comparison with it or with compare to
+	 * @param one first element to compare
+	 * @param two second element to compare
+	 * @return 1,-1,or 0 based on the comparison of the two items
+	 */
 	private int innerCompare(E one, E two) {
 		if(needsComparator!=null) {
 			return needsComparator.compare(one, two);
@@ -70,6 +111,9 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 		
 	
 	}
+	/**
+	 * adds an item to the heap in the correct position
+	 */
 	@Override
 	public void add(E item) {
 		
@@ -89,7 +133,10 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 		}
 		
 	}
-
+	/**
+	 * returns the top element on the heap without removing
+	 * @return The top element of the heap
+	 */
 	@Override
 	public E peek() throws NoSuchElementException {
 		if(isEmpty()) {
@@ -98,7 +145,10 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 		return backing[1];
 		}
 	}
-
+	/**
+	 * returns the top element on the heap and removes it
+	 * @return the element that was removed
+	 */
 	@Override
 	public E extractMax() throws NoSuchElementException {
 		E ret=backing[1];
@@ -107,13 +157,19 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 		percolateDown(1);
 		return ret;
 	}
-
+	/**
+	 * returns the size of the heap or number of items
+	 * @return the size of the heap
+	 */
 	@Override
 	public int size() {
 		
 		return size;
 	}
-
+	/**
+	 * returns true if the heap is empty false if not
+	 * @return the boolean telling if the heap is empty
+	 */
 	@Override
 	public boolean isEmpty() {
 		if(backing==null||backing[1]==null) {
@@ -122,14 +178,19 @@ public class BinaryMaxHeap<E> implements PriorityQueue<E> {
 		return false;
 		}
 	}
-
+	/**
+	 * clears the backing array of the heap
+	 */
 	@Override
 	public  void clear() {
 		backing = (E[]) new Object[size];
 		size=0;
 		
 	}
-
+	/**
+	 * converts the backing array into an array of objects 
+	 * @return the array of objects
+	 */
 	@Override
 	public Object[] toArray() {
 		Object[] ret=new Object[size];
