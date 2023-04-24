@@ -10,7 +10,7 @@ public interface DisjointSet<E> {
      * @param element the element that will be in the new set.
      * @return the linked list with one element
      */
-    public LinkedList<E> makeSet(E element);
+    public void makeSet(E element);
 
     /**
      * Gets the representative of the different linked lists.
