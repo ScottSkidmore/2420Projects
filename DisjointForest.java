@@ -2,6 +2,7 @@ package comprehensive;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class DisjointForest<E> implements DisjointSet<E>{
 
@@ -10,14 +11,20 @@ public class DisjointForest<E> implements DisjointSet<E>{
     @Override
     public void makeSet(E element) {
         Node<E> newNode = new Node<E>(element);
+        newNode.setRepresentative(newNode);
         balls.put(element, newNode);
        
     }
 
     @Override
     public E getRepresentative(E element) {
-        Node<E> tempNode = balls.get(element);
-        while(tempNode.get() != null){
+        Node<E> tempNode;
+    	try {
+        tempNode = balls.get(element);
+    	}catch(Exception e) {
+    		throw new NoSuchElementException();
+    	}
+        while(tempNode.get() != tempNode){
            tempNode=balls.get(getRepresentative(tempNode.get().getElement()));
         }
         return tempNode.getElement();
@@ -27,6 +34,9 @@ public class DisjointForest<E> implements DisjointSet<E>{
     public void union(E one, E two) {
     	E first=getRepresentative(one);
     	E second=getRepresentative(two);
+    	if (first==second) {
+    		return;
+    	}
     	if(balls.get(first).getRank()>balls.get(second).getRank()) {
     		balls.get(second).setRepresentative(balls.get(first));
     	}else if(balls.get(first).getRank()==balls.get(second).getRank()){
