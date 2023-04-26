@@ -24,10 +24,11 @@ public class DisjointForest<E> implements DisjointSet<E>{
     	}catch(Exception e) {
     		throw new NoSuchElementException();
     	}
-        while(tempNode.get() != tempNode){
-           tempNode=balls.get(getRepresentative(tempNode.get().getElement()));
+        while(tempNode.get().get().getElement() != tempNode.get().getElement()){
+           tempNode.setRepresentative(balls.get(getRepresentative(tempNode.get().getElement())));
+         
         }
-        return tempNode.getElement();
+        return tempNode.get().getElement();
     }
 
     @Override
@@ -38,12 +39,12 @@ public class DisjointForest<E> implements DisjointSet<E>{
     		return;
     	}
     	if(balls.get(first).getRank()>balls.get(second).getRank()) {
-    		balls.get(second).setRepresentative(balls.get(first));
+    		balls.get(second).setRepresentative(balls.get(first).get());
     	}else if(balls.get(first).getRank()==balls.get(second).getRank()){
-    		balls.get(first).setRepresentative(balls.get(second));
-    		balls.get(second).setRank(balls.get(second).getRank()+1);
+    		balls.get(second).setRepresentative(balls.get(first).get());
+    		balls.get(first).setRank(balls.get(first).getRank()+1);
     	}else {
-    		balls.get(first).setRepresentative(balls.get(second));
+    		balls.get(first).setRepresentative(balls.get(second).get());
     	}
     	
     	}

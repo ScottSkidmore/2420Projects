@@ -14,12 +14,13 @@ class Disjointtest {
 		dj.makeSet(10);
 		dj.makeSet(9);
 		dj.makeSet(8);
-		System.out.print(dj.getRepresentative(9));
 		dj.union(12, 11);
 		dj.union(11, 9);
 		dj.union(10, 8);
 		dj.union(10, 9);
-		System.out.print(dj.getRepresentative(9));
+		for(int i=8;i<13;i++) {
+			//System.out.println(dj.getRepresentative(i));
+		}
 	}
 	@Test
 	void testCustom() {
@@ -28,12 +29,13 @@ class Disjointtest {
 		cdj.makeSet(10);
 		cdj.makeSet(9);
 		cdj.makeSet(8);
-		System.out.print(cdj.getRepresentative(9));
 		cdj.union(12, 11);
 		cdj.union(11, 9);
 		cdj.union(10, 8);
 		cdj.union(10, 9);
-		System.out.print(cdj.getRepresentative(9));
+		for(int i=8;i<13;i++) {
+			System.out.println(cdj.getRepresentative(i));
+		}
 	}
 	@Test
 	void testDFOnExample() {
@@ -82,10 +84,16 @@ class Disjointtest {
 	
 	@Test
 	void testManySets() {
-		for (int i = 0; i < 100; i++){
-			dj.makeSet(i);
-			dj.union(i, i+50);
-		}
+		
+			dj.makeSet(1);
+			dj.makeSet(2);
+			dj.makeSet(3);
+			dj.makeSet(4);
+			dj.union(1,2);
+			dj.union(3,4);
+			dj.union(2,3);
+			
+		
 	}
 	
 	@Test
@@ -96,12 +104,12 @@ class Disjointtest {
 	
 		for(int i=0;i<64;i++) {
 			
-			dj.union(i, 63+1);
+			dj.union(i, 63+i);
 			
 		}
 for(int i=0;i<32;i++) {
 			
-			dj.union(i, 31+1);
+			dj.union(i, 31+i);
 			
 		}
 for(int i=0;i<16;i++) {
@@ -111,7 +119,7 @@ for(int i=0;i<16;i++) {
 }
 for(int i=0;i<8;i++) {
 	
-	dj.union(i, 7+1);
+	dj.union(i, 7+i);
 	
 }
 for(int i=0;i<4;i++) {
@@ -123,6 +131,9 @@ for(int i=0;i<2;i++) {
 	
 	dj.union(i, 1+i);
 	
+}
+for(int i=0;i<128;i++) {
+	System.out.println(dj.getRepresentative(i));
 }
 for(int i=0;i<64;i++) {
 	

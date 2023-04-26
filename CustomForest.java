@@ -17,20 +17,33 @@ public class CustomForest<E> implements DisjointSet<E> {
 
 	@Override
 	public E getRepresentative(E element) {
-		
-		return balls.get(element).get(0);
+		ArrayList<E> temp= balls.get(element);
+		int element1=0;
+		for(int i=1;i<temp.size();i++) {
+			if(temp.get(i)==null) {
+				}else {
+				element1=i;
+			}
+		}
+		while(temp.get(0)!=temp.get(element1)) {
+			temp=balls.get(temp.get(0));
+			for(int i=1;i<temp.size();i++) {
+				if(temp.get(i)==null) {
+					}else {
+					element1=i;
+				}
+			}
+		}
+		return temp.get(0);
 	}
+	
 
 	@Override
 	public void union(E one, E two) {
 		ArrayList<E> first=balls.get(one);
 		ArrayList<E> second=balls.get(two);
-		if (first.get(1)!=null&&first.get(1)!=first.get(0)) {
-			first=balls.get(first.get(0));
-		}
-		if (second.get(1)!=null&&second.get(1)!=second.get(0)) {
-			second=balls.get(second.get(0));
-		}
+first=balls.get(first.get(0));
+second=balls.get(second.get(0));
 		int element1=0;
 		int element2=0;
 		
@@ -51,7 +64,7 @@ public class CustomForest<E> implements DisjointSet<E> {
     	}else if(element1==element2){
     		first.set(0, second.get(0));
     		second.set(element2, null);
-    		second.add(two );
+    		second.add(second.get(0) );
     	}else {
     		first.set(0, second.get(0));
     	}
